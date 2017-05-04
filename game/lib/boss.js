@@ -1,3 +1,4 @@
+import Bullet from './bullet';
 const MAX_SPEED = 3;
 
 class Boss {
@@ -16,6 +17,12 @@ class Boss {
     this.speed = 0.5;
     this.friction = 0.95;
     this.keys = {};
+    this.bullets = [];
+  }
+
+  shootBullet() {
+    this.bullets.push(new Bullet(this.center));
+    console.log(this.bullets);
   }
 
   set_center() {
@@ -67,6 +74,12 @@ class Boss {
     // console.log(this.center);
   }
 
+  drawBullets(stage) {
+    this.bullets.forEach((bullet) => {
+      bullet.draw(stage);
+    });
+  }
+
   draw(stage) {
     let boss_img = new Image();
     this.update_movement();
@@ -74,6 +87,7 @@ class Boss {
     this.bind(stage);
     this.update_offset();
     this.get_dir();
+    this.drawBullets(stage);
     boss_img.src = "./assets/dragon_spritesheet.png";
     if (this.dir === 'east') {
       stage.drawImage(boss_img, 0, 0, 102, 134, this.x_pos, this.y_pos, 102, 134);

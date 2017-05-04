@@ -40,6 +40,11 @@ class StageView {
     document.getElementsByTagName("body")[0].addEventListener("keyup", (e) => {
       this.boss.keys[e.keyCode] = false;
     });
+    document.getElementsByTagName("body")[0].addEventListener("keypress", (e) => {
+      if (e.keyCode === 32) {
+        this.boss.shootBullet();
+      }
+    });
   }
 
   start() {

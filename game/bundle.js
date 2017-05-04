@@ -115,6 +115,11 @@ class StageView {
     document.getElementsByTagName("body")[0].addEventListener("keyup", (e) => {
       this.boss.keys[e.keyCode] = false;
     });
+    document.getElementsByTagName("body")[0].addEventListener("keypress", (e) => {
+      if (e.keyCode === 32) {
+        this.boss.shootBullet();
+      }
+    });
   }
 
   start() {
@@ -159,6 +164,8 @@ class StageView {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bullet__ = __webpack_require__(4);
+
 const MAX_SPEED = 3;
 
 class Boss {
@@ -177,6 +184,12 @@ class Boss {
     this.speed = 0.5;
     this.friction = 0.95;
     this.keys = {};
+    this.bullets = [];
+  }
+
+  shootBullet() {
+    this.bullets.push(new __WEBPACK_IMPORTED_MODULE_0__bullet__["a" /* default */](this.center));
+    console.log(this.bullets);
   }
 
   set_center() {
@@ -228,6 +241,12 @@ class Boss {
     // console.log(this.center);
   }
 
+  drawBullets(stage) {
+    this.bullets.forEach((bullet) => {
+      bullet.draw(stage);
+    });
+  }
+
   draw(stage) {
     let boss_img = new Image();
     this.update_movement();
@@ -235,6 +254,7 @@ class Boss {
     this.bind(stage);
     this.update_offset();
     this.get_dir();
+    this.drawBullets(stage);
     boss_img.src = "./assets/dragon_spritesheet.png";
     if (this.dir === 'east') {
       stage.drawImage(boss_img, 0, 0, 102, 134, this.x_pos, this.y_pos, 102, 134);
@@ -384,6 +404,31 @@ document.addEventListener("DOMContentLoaded", function() {
   const stage = canvas.getContext('2d');
   new __WEBPACK_IMPORTED_MODULE_0__lib_stage__["a" /* default */](stage);
 });
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class Bullet {
+
+  constructor(boss_pos) {
+    this.height = 10;
+    this.width = 10;
+    this.x_pos = boss_pos[0];
+    this.y_pos = boss_pos[1];
+  }
+
+  draw(stage) {
+    stage.fillStyle = "red";
+    stage.fillRect(this.x_pos, this.y_pos, this.height, this.width);
+  }
+
+}
+
+
+/* harmony default export */ __webpack_exports__["a"] = (Bullet);
 
 
 /***/ })
