@@ -1,0 +1,3 @@
+dragon_avenger,0,135,132,140
+dragon_avenger_east,0,0,102,134
+dragon-avenger-west,103,0,102,134

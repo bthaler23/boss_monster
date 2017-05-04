@@ -72,33 +72,79 @@
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boss__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__enemies__ = __webpack_require__(3);
+
 
 
 class StageView {
 
   constructor(stage) {
     this.stage = stage;
-    this.boss = new __WEBPACK_IMPORTED_MODULE_0__boss__["a" /* default */](stage);
+    this.addBoss();
+    this.enemies = [];
+    this.addEnemies();
+    this.slain_enemies = [];
+    this.addKeyEvents();
+    this.start();
+  }
+
+  addBoss() {
+    this.boss = new __WEBPACK_IMPORTED_MODULE_0__boss__["a" /* default */]();
+  }
+
+  addEnemies() {
+    for (let i = 0; i < 3 ; i++) {
+      this.enemies.push(new __WEBPACK_IMPORTED_MODULE_1__enemies__["a" /* default */]());
+    }
+  }
+
+  detectCollisions() {
+    this.enemies.forEach((enemy) => {
+      if (!((enemy.x_pos > this.boss.x_offset || enemy.x_offset < this.boss.x_pos) ||
+      (enemy.y_pos > this.boss.y_offset || enemy.y_offset < this.boss.y_pos))) {
+        if (enemy.alive) {this.slain_enemies.push(enemy);}
+        enemy.alive = false;
+      }
+    });
+  }
+
+  addKeyEvents() {
     document.getElementsByTagName("body")[0].addEventListener("keydown", (e) => {
       this.boss.keys[e.keyCode] = true;
     });
     document.getElementsByTagName("body")[0].addEventListener("keyup", (e) => {
       this.boss.keys[e.keyCode] = false;
     });
-    this.start();
   }
 
   start() {
      requestAnimationFrame(this.animate.bind(this));
+
   }
 
   animate(time) {
     this.stage.clearRect(0, 0, 1300, 500);
-    // this.stage.fillStyle = "red";
-    // this.stage.fillRect(0, 0, 1300, 500);
+    this.enemies.forEach((enemy) => {
+      if (enemy.alive) {
+        enemy.draw(this.stage);
+      }
+    });
+    // console.log(this.slain_enemies);
+    if (this.slain_enemies.length === this.enemies.length) {
+      this.refresh_enemies();
+    }
     this.boss.draw(this.stage);
+    this.detectCollisions();
     requestAnimationFrame(this.animate.bind(this));
   }
+
+  refresh_enemies() {
+    this.slain_enemies = [];
+    this.enemies.forEach((enemy) => {
+      enemy.reposition();
+    });
+  }
+
 
 
 
@@ -112,44 +158,52 @@ class StageView {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+const MAX_SPEED = 4;
 
 class Boss {
 
-  constructor(stage) {
+  constructor() {
     this.x_vel = 0;
     this.y_vel = 0;
-    this.keys = {};
     this.x_pos = 100;
     this.y_pos = 100;
-    this.draw(stage);
+    this.width = 132;
+    this.height = 140;
+    this.dir = 'still';
+    this.x_offset = this.x_pos + this.width;
+    this.y_offset = this.y_pos + this.height;
+    this.speed = 0.5;
+    this.friction = 0.95;
+    this.keys = {};
   }
 
-  movement() {
+  update_movement() {
     // console.log(this.keys);
-    if (this.keys[37]) {
-      this.x_vel -= 0.5;
+    if (this.keys[37] && this.x_vel >= -1 * MAX_SPEED) {
+      this.x_vel -= this.speed;
     }
-    if (this.keys[38]) {
-      this.y_vel -= 0.5;
+    if (this.keys[38] && this.y_vel >= -1 * MAX_SPEED) {
+      this.y_vel -= this.speed;
     }
-    if (this.keys[39]) {
-      this.x_vel += 0.5;
+    if (this.keys[39] && this.x_vel <= MAX_SPEED) {
+      this.x_vel += this.speed;
     }
-    if (this.keys[40]) {
-      this.y_vel += 0.5;
+    if (this.keys[40] && this.y_vel <= MAX_SPEED) {
+      this.y_vel += this.speed;
     }
+    this.x_vel *= this.friction;
+    this.y_vel *= this.friction;
   }
 
-  draw(stage) {
-    let boss_img = new Image();
-    this.movement();
-    this.x_vel *= 0.95;
-    this.y_vel *= 0.95;
-    // console.log(this.x_vel);
+  move() {
     this.x_pos += this.x_vel;
     this.y_pos += this.y_vel;
-    if (this.x_pos >= stage.canvas.width - 130) {
-      this.x_pos = stage.canvas.width - 130;
+
+  }
+
+  bind(stage) {
+    if (this.x_pos >= stage.canvas.width - 132) {
+      this.x_pos = stage.canvas.width - 132;
     }
     if (this.x_pos <= 0) {
       this.x_pos = 0;
@@ -160,9 +214,74 @@ class Boss {
     if (this.y_pos <= 0) {
       this.y_pos = 0;
     }
-    boss_img.src = "./assets/dragon_avenger.gif";
-    stage.drawImage(boss_img, this.x_pos, this.y_pos);
   }
+
+  update_offset() {
+    this.x_offset = this.x_pos + this.width;
+    this.y_offset = this.y_pos + this.height;
+  }
+
+  draw(stage) {
+    let boss_img = new Image();
+    this.update_movement();
+    this.move();
+    this.bind(stage);
+    this.update_offset();
+    this.get_dir();
+    console.log(this.dir);
+    boss_img.src = "./assets/dragon_spritesheet.png";
+    if (this.dir === 'east') {
+      stage.drawImage(boss_img, 0, 0, 102, 134, this.x_pos, this.y_pos, 102, 134);
+    }
+    else if (this.dir === 'west') {
+      stage.drawImage(boss_img, 103, 0, 102, 134, this.x_pos, this.y_pos, 102, 134);
+    }
+    else {
+      stage.drawImage(boss_img, 0, 135, 132, 140, this.x_pos, this.y_pos, 132, 140);
+    }
+  }
+
+  get_dir() {
+    let x_vel = this.x_vel;
+    let y_vel = this.y_vel;
+    if ((x_vel < 0.3 && x_vel > -0.3) && (y_vel < 0.3 && y_vel > -0.3)){
+      this.dir = 'still';
+    }
+    else if (x_vel > 0.5 && y_vel < -0.5)
+      this.dir = 'east';
+      //northeast
+    else if (x_vel > 0.5 && (y_vel > -0.3 && y_vel < 0.3)) {
+      this.dir = 'east';
+      //east
+    }
+    else if (x_vel > 0.5 && (y_vel > 0.5)) {
+      this.dir = 'east';
+      //southeast
+    }
+    else if ((x_vel < 0.3 && x_vel > -0.3) && y_vel > 0.5) {
+      this.dir = 'south';
+      //south
+    }
+    else if (x_vel < -0.5 && y_vel > 0.5) {
+      this.dir = 'west';
+      //southwest
+    }
+    else if (x_vel < -0.5 && (y_vel < 0.3 && y_vel > -0.3)) {
+      this.dir = 'west';
+      //west
+    }
+    else if (x_vel < -0.5 && y_vel < -0.5) {
+      this.dir = 'west';
+      //northwest
+    }
+    else if ((x_vel < 0.5 && x_vel > -0.5) && y_vel < -0.5) {
+      this.dir = 'north';
+      //north
+    }
+
+
+  }
+
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Boss);
@@ -177,13 +296,53 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_stage__ = __webpack_require__(0);
 
 
+const GAME_WIDTH = 1300;
+const GAME_HEIGHT = 500;
+
 document.addEventListener("DOMContentLoaded", function() {
   var canvas = document.getElementById("gameScreen");
-  canvas.width = 1300;
-  canvas.height = 500;
+  canvas.width = GAME_WIDTH;
+  canvas.height = GAME_HEIGHT;
   const stage = canvas.getContext('2d');
   new __WEBPACK_IMPORTED_MODULE_0__lib_stage__["a" /* default */](stage);
 });
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+
+class Enemy {
+
+  constructor() {
+    this.x_pos = Math.floor(Math.random() * 1200);
+    this.y_pos = Math.floor(Math.random() * 400);
+    this.height = 50;
+    this.width = 50;
+    this.x_offset = this.x_pos + this.width;
+    this.y_offset = this.y_pos + this.height;
+    this.alive = true;
+  }
+
+  draw(stage) {
+    stage.fillStyle = "red";
+    stage.fillRect(this.x_pos, this.y_pos, this.height, this.width);
+  }
+
+  reposition() {
+    this.alive = true;
+    this.x_pos = Math.floor(Math.random() * 1200);
+    this.y_pos = Math.floor(Math.random() * 400);
+    this.x_offset = this.x_pos + this.width;
+    this.y_offset = this.y_pos + this.height;
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Enemy);
 
 
 /***/ })
