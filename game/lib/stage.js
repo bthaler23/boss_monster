@@ -18,8 +18,8 @@ class StageView {
   }
 
   addEnemies() {
-    for (let i = 0; i < 3 ; i++) {
-      this.enemies.push(new Enemy());
+    for (let i = 0; i < 5 ; i++) {
+      this.enemies.push(new Enemy(this.boss.center));
     }
   }
 
@@ -51,6 +51,7 @@ class StageView {
     this.stage.clearRect(0, 0, 1300, 500);
     this.enemies.forEach((enemy) => {
       if (enemy.alive) {
+        // enemy.calculate_tan(this.boss.center);
         enemy.draw(this.stage);
       }
     });
@@ -66,7 +67,7 @@ class StageView {
   refresh_enemies() {
     this.slain_enemies = [];
     this.enemies.forEach((enemy) => {
-      enemy.reposition();
+      enemy.reposition(this.boss.center);
     });
   }
 

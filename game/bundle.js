@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -72,7 +72,7 @@
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boss__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__enemies__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__enemies__ = __webpack_require__(2);
 
 
 
@@ -93,8 +93,8 @@ class StageView {
   }
 
   addEnemies() {
-    for (let i = 0; i < 3 ; i++) {
-      this.enemies.push(new __WEBPACK_IMPORTED_MODULE_1__enemies__["a" /* default */]());
+    for (let i = 0; i < 5 ; i++) {
+      this.enemies.push(new __WEBPACK_IMPORTED_MODULE_1__enemies__["a" /* default */](this.boss.center));
     }
   }
 
@@ -126,6 +126,7 @@ class StageView {
     this.stage.clearRect(0, 0, 1300, 500);
     this.enemies.forEach((enemy) => {
       if (enemy.alive) {
+        // enemy.calculate_tan(this.boss.center);
         enemy.draw(this.stage);
       }
     });
@@ -141,7 +142,7 @@ class StageView {
   refresh_enemies() {
     this.slain_enemies = [];
     this.enemies.forEach((enemy) => {
-      enemy.reposition();
+      enemy.reposition(this.boss.center);
     });
   }
 
@@ -165,20 +166,24 @@ class Boss {
   constructor() {
     this.x_vel = 0;
     this.y_vel = 0;
-    this.x_pos = 100;
-    this.y_pos = 100;
+    this.x_pos = 600;
+    this.y_pos = 200;
     this.width = 132;
     this.height = 140;
     this.dir = 'still';
     this.x_offset = this.x_pos + this.width;
     this.y_offset = this.y_pos + this.height;
+    this.set_center();
     this.speed = 0.5;
     this.friction = 0.95;
     this.keys = {};
   }
 
+  set_center() {
+    this.center = [(this.x_offset + this.x_pos)/2, (this.y_offset + this.y_pos)/2];
+  }
+
   update_movement() {
-    // console.log(this.keys);
     if (this.keys[37] && this.x_vel >= -1 * MAX_SPEED) {
       this.x_vel -= this.speed;
     }
@@ -219,6 +224,8 @@ class Boss {
   update_offset() {
     this.x_offset = this.x_pos + this.width;
     this.y_offset = this.y_pos + this.height;
+    this.set_center();
+    // console.log(this.center);
   }
 
   draw(stage) {
@@ -228,7 +235,7 @@ class Boss {
     this.bind(stage);
     this.update_offset();
     this.get_dir();
-    console.log(this.dir);
+    // console.log(this.dir);
     boss_img.src = "./assets/dragon_spritesheet.png";
     if (this.dir === 'east') {
       stage.drawImage(boss_img, 0, 0, 102, 134, this.x_pos, this.y_pos, 102, 134);
@@ -292,6 +299,76 @@ class Boss {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+
+
+class Enemy {
+
+  constructor(boss_center) {
+    this.x_pos = Math.floor(Math.random() * 1200);
+    this.y_pos = Math.floor(Math.random() * 400);
+    this.height = 50;
+    this.width = 50;
+    this.x_offset = this.x_pos + this.width;
+    this.y_offset = this.y_pos + this.height;
+    this.alive = true;
+    this.set_center();
+    this.boss_center = boss_center;
+    this.calculate_tan(this.boss_center);
+  }
+
+  draw(stage) {
+    this.update_position();
+    this.update_offset();
+    stage.fillStyle = "red";
+    stage.fillRect(this.x_pos, this.y_pos, this.height, this.width);
+  }
+
+  set_center() {
+    this.center = [(this.x_offset + this.x_pos)/2, (this.y_offset + this.y_pos)/2];
+  }
+
+  calculate_tan(boss_center) {
+    let triangle_x = boss_center[0]- this.center[0];
+    let triangle_y = boss_center[1] - this.center[1];
+    let tan_angle = Math.atan2(triangle_y, triangle_x);
+    // console.log(tan_angle);
+    this.x_vel = Math.cos(tan_angle) * 3;
+    this.y_vel = Math.sin(tan_angle) * 3;
+    // console.log(this.x_vel);
+    // console.log(this.y_vel);
+  }
+
+  update_position() {
+    this.x_pos += this.x_vel;
+    this.y_pos += this.y_vel;
+
+  }
+
+  update_offset() {
+    this.x_offset = this.x_pos + this.width;
+    this.y_offset = this.y_pos + this.height;
+  }
+
+  reposition(boss_center) {
+    this.alive = true;
+    this.x_pos = Math.floor(Math.random() * 1200);
+    this.y_pos = Math.floor(Math.random() * 400);
+    this.x_offset = this.x_pos + this.width;
+    this.y_offset = this.y_pos + this.height;
+    this.set_center();
+    this.calculate_tan(boss_center);
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Enemy);
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_stage__ = __webpack_require__(0);
 
@@ -306,43 +383,6 @@ document.addEventListener("DOMContentLoaded", function() {
   const stage = canvas.getContext('2d');
   new __WEBPACK_IMPORTED_MODULE_0__lib_stage__["a" /* default */](stage);
 });
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-
-class Enemy {
-
-  constructor() {
-    this.x_pos = Math.floor(Math.random() * 1200);
-    this.y_pos = Math.floor(Math.random() * 400);
-    this.height = 50;
-    this.width = 50;
-    this.x_offset = this.x_pos + this.width;
-    this.y_offset = this.y_pos + this.height;
-    this.alive = true;
-  }
-
-  draw(stage) {
-    stage.fillStyle = "red";
-    stage.fillRect(this.x_pos, this.y_pos, this.height, this.width);
-  }
-
-  reposition() {
-    this.alive = true;
-    this.x_pos = Math.floor(Math.random() * 1200);
-    this.y_pos = Math.floor(Math.random() * 400);
-    this.x_offset = this.x_pos + this.width;
-    this.y_offset = this.y_pos + this.height;
-  }
-
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Enemy);
 
 
 /***/ })

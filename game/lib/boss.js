@@ -5,20 +5,24 @@ class Boss {
   constructor() {
     this.x_vel = 0;
     this.y_vel = 0;
-    this.x_pos = 100;
-    this.y_pos = 100;
+    this.x_pos = 600;
+    this.y_pos = 200;
     this.width = 132;
     this.height = 140;
     this.dir = 'still';
     this.x_offset = this.x_pos + this.width;
     this.y_offset = this.y_pos + this.height;
+    this.set_center();
     this.speed = 0.5;
     this.friction = 0.95;
     this.keys = {};
   }
 
+  set_center() {
+    this.center = [(this.x_offset + this.x_pos)/2, (this.y_offset + this.y_pos)/2];
+  }
+
   update_movement() {
-    // console.log(this.keys);
     if (this.keys[37] && this.x_vel >= -1 * MAX_SPEED) {
       this.x_vel -= this.speed;
     }
@@ -59,6 +63,8 @@ class Boss {
   update_offset() {
     this.x_offset = this.x_pos + this.width;
     this.y_offset = this.y_pos + this.height;
+    this.set_center();
+    // console.log(this.center);
   }
 
   draw(stage) {
@@ -68,7 +74,7 @@ class Boss {
     this.bind(stage);
     this.update_offset();
     this.get_dir();
-    console.log(this.dir);
+    // console.log(this.dir);
     boss_img.src = "./assets/dragon_spritesheet.png";
     if (this.dir === 'east') {
       stage.drawImage(boss_img, 0, 0, 102, 134, this.x_pos, this.y_pos, 102, 134);
