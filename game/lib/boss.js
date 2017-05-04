@@ -1,4 +1,4 @@
-const MAX_SPEED = 4;
+const MAX_SPEED = 3;
 
 class Boss {
 
@@ -74,7 +74,6 @@ class Boss {
     this.bind(stage);
     this.update_offset();
     this.get_dir();
-    // console.log(this.dir);
     boss_img.src = "./assets/dragon_spritesheet.png";
     if (this.dir === 'east') {
       stage.drawImage(boss_img, 0, 0, 102, 134, this.x_pos, this.y_pos, 102, 134);
@@ -90,44 +89,53 @@ class Boss {
   get_dir() {
     let x_vel = this.x_vel;
     let y_vel = this.y_vel;
-    if ((x_vel < 0.3 && x_vel > -0.3) && (y_vel < 0.3 && y_vel > -0.3)){
+    // console.log(x_vel);
+    // console.log(y_vel);
+    if ((x_vel < 0.2 && x_vel > -0.2) && (y_vel < 0.2 && y_vel > -0.2)) {
       this.dir = 'still';
     }
-    else if (x_vel > 0.5 && y_vel < -0.5)
-      this.dir = 'east';
-      //northeast
-    else if (x_vel > 0.5 && (y_vel > -0.3 && y_vel < 0.3)) {
-      this.dir = 'east';
-      //east
+    else if (x_vel > 0) {
+      let tan_angle = Math.atan2(x_vel, y_vel) / Math.PI * 180;
+      // console.log(tan_angle);
+      if (tan_angle <= 22.5) {
+        this.dir = 'south';
+        //south
+      } else if (tan_angle <= 67.5) {
+        this.dir = 'east';
+        //southeast
+      } else if (tan_angle <= 112.5) {
+        this.dir = 'east';
+        //east
+      } else if (tan_angle <= 157.5) {
+        this.dir = 'east';
+        //northeast
+      } else if (tan_angle <= 180) {
+        this.dir = 'north';
+        //north
+      }
     }
-    else if (x_vel > 0.5 && (y_vel > 0.5)) {
-      this.dir = 'east';
-      //southeast
+    else if (x_vel < 0) {
+      let tan_angle = Math.atan2(x_vel, y_vel) / Math.PI * 180;
+      if (tan_angle >= -22.5) {
+        this.dir = 'south';
+        //south
+      } else if (tan_angle >= -67.5) {
+        this.dir = 'west';
+        //southwest
+      } else if (tan_angle >= -112.5) {
+        this.dir = 'west';
+        //west
+      } else if (tan_angle >= -157.5) {
+        this.dir = 'west';
+        //northwest
+      } else if (tan_angle >= -180) {
+        this.dir = 'north';
+        //north
+      }
     }
-    else if ((x_vel < 0.3 && x_vel > -0.3) && y_vel > 0.5) {
-      this.dir = 'south';
-      //south
-    }
-    else if (x_vel < -0.5 && y_vel > 0.5) {
-      this.dir = 'west';
-      //southwest
-    }
-    else if (x_vel < -0.5 && (y_vel < 0.3 && y_vel > -0.3)) {
-      this.dir = 'west';
-      //west
-    }
-    else if (x_vel < -0.5 && y_vel < -0.5) {
-      this.dir = 'west';
-      //northwest
-    }
-    else if ((x_vel < 0.5 && x_vel > -0.5) && y_vel < -0.5) {
-      this.dir = 'north';
-      //north
-    }
-
-
   }
-
 }
+
+
 
 export default Boss;
