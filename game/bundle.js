@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -71,33 +71,35 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boss__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boss__ = __webpack_require__(1);
 
 
 class StageView {
 
   constructor(stage) {
     this.stage = stage;
-    let boss = new __WEBPACK_IMPORTED_MODULE_0__boss__["a" /* default */](stage);
-
+    this.boss = new __WEBPACK_IMPORTED_MODULE_0__boss__["a" /* default */](stage);
     document.getElementsByTagName("body")[0].addEventListener("keydown", (e) => {
-      stage.clearRect(0, 0, 1300, 500);
-      if (e.key === "ArrowUp" ){
-        boss.move(0, -10);
-      }
-      else if (e.key === "ArrowDown") {
-        boss.move(0, 10);
-      }
-      else if (e.key === "ArrowLeft") {
-        boss.move(-10, 0);
-      }
-      else if (e.key === "ArrowRight") {
-        boss.move(10, 0);
-      }
-      // boss.move(0, -);
-      boss.draw(stage);
+      this.boss.keys[e.keyCode] = true;
     });
+    document.getElementsByTagName("body")[0].addEventListener("keyup", (e) => {
+      this.boss.keys[e.keyCode] = false;
+    });
+    this.start();
   }
+
+  start() {
+     requestAnimationFrame(this.animate.bind(this));
+  }
+
+  animate(time) {
+    this.stage.clearRect(0, 0, 1300, 500);
+    // this.stage.fillStyle = "red";
+    // this.stage.fillRect(0, 0, 1300, 500);
+    this.boss.draw(this.stage);
+    requestAnimationFrame(this.animate.bind(this));
+  }
+
 
 
 }
@@ -107,6 +109,67 @@ class StageView {
 
 /***/ }),
 /* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+class Boss {
+
+  constructor(stage) {
+    this.x_vel = 0;
+    this.y_vel = 0;
+    this.keys = {};
+    this.x_pos = 100;
+    this.y_pos = 100;
+    this.draw(stage);
+  }
+
+  movement() {
+    // console.log(this.keys);
+    if (this.keys[37]) {
+      this.x_vel -= 0.5;
+    }
+    if (this.keys[38]) {
+      this.y_vel -= 0.5;
+    }
+    if (this.keys[39]) {
+      this.x_vel += 0.5;
+    }
+    if (this.keys[40]) {
+      this.y_vel += 0.5;
+    }
+  }
+
+  draw(stage) {
+    let boss_img = new Image();
+    this.movement();
+    this.x_vel *= 0.95;
+    this.y_vel *= 0.95;
+    // console.log(this.x_vel);
+    this.x_pos += this.x_vel;
+    this.y_pos += this.y_vel;
+    if (this.x_pos >= stage.canvas.width - 130) {
+      this.x_pos = stage.canvas.width - 130;
+    }
+    if (this.x_pos <= 0) {
+      this.x_pos = 0;
+    }
+    if (this.y_pos >= stage.canvas.height - 140) {
+      this.y_pos = stage.canvas.height - 140;
+    }
+    if (this.y_pos <= 0) {
+      this.y_pos = 0;
+    }
+    boss_img.src = "./assets/dragon_avenger.gif";
+    stage.drawImage(boss_img, this.x_pos, this.y_pos);
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Boss);
+
+
+/***/ }),
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -121,38 +184,6 @@ document.addEventListener("DOMContentLoaded", function() {
   const stage = canvas.getContext('2d');
   new __WEBPACK_IMPORTED_MODULE_0__lib_stage__["a" /* default */](stage);
 });
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-class Boss {
-
-  constructor(stage) {
-    this.x_pos = 100;
-    this.y_pos = 100;
-    this.draw(stage);
-  }
-
-  move(x_dir, y_dir) {
-    this.x_pos += x_dir;
-    this.y_pos += y_dir;
-  }
-
-  draw(stage) {
-    let boss_img = new Image();
-    boss_img.onload = function() {
-        stage.drawImage(boss_img, this.x_pos, this.y_pos);
-    }.bind(this);
-    boss_img.src = "./assets/dragon_avenger.gif";
-  }
-
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Boss);
 
 
 /***/ })
