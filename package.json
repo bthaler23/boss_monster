@@ -1,0 +1,26 @@
+{
+  "name": "nexus",
+  "version": "1.0.0",
+  "description": "## Minimum Viable Product",
+  "main": "webpack.config.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bthaler23/boss-monster.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bthaler23/boss-monster/issues"
+  },
+  "homepage": "https://github.com/bthaler23/boss-monster#readme",
+  "dependencies": {
+    "webpack": "^2.4.1"
+  }
+}
