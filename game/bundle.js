@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -80,13 +80,14 @@ class StageView {
 
   constructor(stage) {
     this.stage = stage;
-    this.addBoss();
-    this.enemies = [];
-    this.addEnemies();
+    this.enemies = []; 
     this.slain_enemies = [];
+    this.addBoss();
+    this.addEnemies();
     this.addKeyEvents();
     this.start();
   }
+
 
   addBoss() {
     this.boss = new __WEBPACK_IMPORTED_MODULE_0__boss__["a" /* default */]();
@@ -105,6 +106,7 @@ class StageView {
         (enemy.y_pos > this.boss.y_offset || enemy.y_offset < this.boss.y_pos))) {
           this.slain_enemies.push(enemy);
           enemy.alive = false;
+          this.boss.health -= 20;
         } else {
           this.boss.bullets.forEach((bullet) => {
             if (!((enemy.x_pos > bullet.x_offset || enemy.x_offset < bullet.x_pos) ||
@@ -175,6 +177,8 @@ class StageView {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bullet__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__status__ = __webpack_require__(4);
+
 
 const MAX_SPEED = 3;
 
@@ -195,6 +199,13 @@ class Boss {
     this.friction = 0.92;
     this.keys = {};
     this.bullets = [];
+    this.setStatus();
+  }
+
+
+  setStatus() {
+    this.health = 100;
+    this.status = new __WEBPACK_IMPORTED_MODULE_1__status__["a" /* default */]();
   }
 
   shootBullet(x_offSet, y_offSet) {
@@ -266,6 +277,7 @@ class Boss {
     this.update_offset();
     this.get_dir();
     this.drawBullets(stage);
+    this.status.draw(stage, this.health);
     boss_img.src = "./assets/dragon_spritesheet.png";
     if (this.dir === 'east') {
       stage.drawImage(boss_img, 0, 0, 102, 134, this.x_pos, this.y_pos, 102, 134);
@@ -454,6 +466,32 @@ class Enemy {
 
 /***/ }),
 /* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+class Status {
+
+  constructor() {
+
+  }
+
+  draw(stage, health) {
+    stage.font = '30px Arial';
+    stage.fillText("Health", 10, 40);
+    stage.fillStyle = 'black';
+    stage.fillRect(9, 49, 302, 22);
+    stage.fillStyle = 'red';
+    stage.fillRect(10, 50, 3 * health, 20);
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Status);
+
+
+/***/ }),
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

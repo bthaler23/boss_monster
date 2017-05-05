@@ -5,13 +5,14 @@ class StageView {
 
   constructor(stage) {
     this.stage = stage;
-    this.addBoss();
-    this.enemies = [];
-    this.addEnemies();
+    this.enemies = []; 
     this.slain_enemies = [];
+    this.addBoss();
+    this.addEnemies();
     this.addKeyEvents();
     this.start();
   }
+
 
   addBoss() {
     this.boss = new Boss();
@@ -30,6 +31,7 @@ class StageView {
         (enemy.y_pos > this.boss.y_offset || enemy.y_offset < this.boss.y_pos))) {
           this.slain_enemies.push(enemy);
           enemy.alive = false;
+          this.boss.health -= 20;
         } else {
           this.boss.bullets.forEach((bullet) => {
             if (!((enemy.x_pos > bullet.x_offset || enemy.x_offset < bullet.x_pos) ||

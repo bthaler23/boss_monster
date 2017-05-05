@@ -1,4 +1,5 @@
 import Bullet from './bullet';
+import Status from './status';
 const MAX_SPEED = 3;
 
 class Boss {
@@ -18,6 +19,13 @@ class Boss {
     this.friction = 0.92;
     this.keys = {};
     this.bullets = [];
+    this.setStatus();
+  }
+
+
+  setStatus() {
+    this.health = 100;
+    this.status = new Status();
   }
 
   shootBullet(x_offSet, y_offSet) {
@@ -89,6 +97,7 @@ class Boss {
     this.update_offset();
     this.get_dir();
     this.drawBullets(stage);
+    this.status.draw(stage, this.health);
     boss_img.src = "./assets/dragon_spritesheet.png";
     if (this.dir === 'east') {
       stage.drawImage(boss_img, 0, 0, 102, 134, this.x_pos, this.y_pos, 102, 134);
