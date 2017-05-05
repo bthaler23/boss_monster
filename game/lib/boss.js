@@ -1,10 +1,12 @@
 import Bullet from './bullet';
 import Status from './status';
+import MovingObject from './moving_object';
 const MAX_SPEED = 3;
 
-class Boss {
+class Boss extends MovingObject {
 
   constructor() {
+    super();
     this.x_vel = 0;
     this.y_vel = 0;
     this.x_pos = 600;
@@ -12,9 +14,7 @@ class Boss {
     this.width = 132;
     this.height = 140;
     this.dir = 'still';
-    this.x_offset = this.x_pos + this.width;
-    this.y_offset = this.y_pos + this.height;
-    this.set_center();
+    this.move();
     this.speed = 0.5;
     this.friction = 0.92;
     this.keys = {};
@@ -37,15 +37,11 @@ class Boss {
   shootBullet(x_offSet, y_offSet) {
     // debugger
     if (this.energy >= 10) {
-      this.bullets.push(new Bullet(this.center, x_offSet, y_offSet));
+      this.bullets.push(new Bullet(this.center, 'red', x_offSet, y_offSet));
       this.energy -= 10;
 
     }
     // console.log(this.bullets);
-  }
-
-  set_center() {
-    this.center = [(this.x_offset + this.x_pos)/2, (this.y_offset + this.y_pos)/2];
   }
 
   update_movement() {
@@ -65,12 +61,6 @@ class Boss {
     this.y_vel *= this.friction;
   }
 
-  move() {
-    this.x_pos += this.x_vel;
-    this.y_pos += this.y_vel;
-
-  }
-
   bind(stage) {
     if (this.x_pos >= stage.canvas.width - 132) {
       this.x_pos = stage.canvas.width - 132;
@@ -84,13 +74,6 @@ class Boss {
     if (this.y_pos <= 0) {
       this.y_pos = 0;
     }
-  }
-
-  update_offset() {
-    this.x_offset = this.x_pos + this.width;
-    this.y_offset = this.y_pos + this.height;
-    this.set_center();
-    // console.log(this.center);
   }
 
   drawBullets(stage) {

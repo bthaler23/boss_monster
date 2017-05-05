@@ -1,45 +1,29 @@
-class Bullet {
+import MovingObject from './moving_object';
 
-  constructor(boss_pos, x_offset, y_offset) {
+class Bullet extends MovingObject {
+
+  constructor(caster_pos, bullet_type, target_x, target_y) {
+    super();
     this.height = 10;
     this.width = 10;
-    this.x_pos = boss_pos[0];
-    this.y_pos = boss_pos[1];
-    this.x_offset = this.x_pos + this.width;
-    this.y_offset = this.y_pos + this.height;
-    this.set_velocity(this.x_pos - x_offset, this.y_pos - y_offset);
+    this.x_pos = caster_pos[0];
+    this.y_pos = caster_pos[1];
+    this.bullet_type = bullet_type;
+    this.target_x = this.x_pos + this.width;
+    this.target_y = this.y_pos + this.height;
+    this.set_velocity(this.x_pos - target_x, this.y_pos - target_y);
     this.set_center();
   }
 
-  set_velocity(x_offset, y_offset) {
-    let tan_angle = Math.atan2(x_offset, y_offset);
-    // console.log(tan_angle / Math.PI * 180);
+  set_velocity(offset_x, offset_y) {
+    let tan_angle = Math.atan2(offset_x, offset_y);
     this.x_vel = Math.sin(tan_angle) * -8;
     this.y_vel = Math.cos(tan_angle) * -8;
-    // console.log(this.y_vel);
-    // debugger
-  }
-
-  set_center() {
-    this.center = [(this.x_offset + this.x_pos)/2, (this.y_offset + this.y_pos)/2];
-  }
-
-  update_offset() {
-    this.x_offset = this.x_pos + this.width;
-    this.y_offset = this.y_pos + this.height;
-    this.set_center();
-    // console.log(this.center);
-  }
-
-  update_movement() {
-    this.x_pos += this.x_vel;
-    this.y_pos += this.y_vel;
   }
 
   draw(stage) {
-    this.update_movement();
-    this.update_offset();
-    stage.fillStyle = "red";
+    this.move();
+    stage.fillStyle = this.bullet_type;
     stage.fillRect(this.x_pos, this.y_pos, this.height, this.width);
   }
 

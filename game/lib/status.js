@@ -6,6 +6,7 @@ class Status {
   }
 
   draw(stage, health, energy) {
+    stage.fillStyle = 'red';
     stage.font = '30px Arial';
     stage.fillText("Health", 10, 40);
     stage.fillStyle = 'black';
