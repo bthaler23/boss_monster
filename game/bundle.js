@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -104,9 +104,84 @@ class MovingObject {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boss__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__enemies__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__wizard__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moving_object__ = __webpack_require__(0);
+
+
+class Bullet extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */] {
+
+  constructor(caster_pos, bullet_type, target_x, target_y) {
+    super();
+    this.height = 10;
+    this.width = 10;
+    this.x_pos = caster_pos[0];
+    this.y_pos = caster_pos[1];
+    this.bullet_type = bullet_type;
+    this.target_x = this.x_pos + this.width;
+    this.target_y = this.y_pos + this.height;
+    this.set_velocity(this.x_pos - target_x, this.y_pos - target_y);
+    this.set_center();
+  }
+
+  set_velocity(offset_x, offset_y) {
+    let tan_angle = Math.atan2(offset_x, offset_y);
+    this.x_vel = Math.sin(tan_angle) * -8;
+    this.y_vel = Math.cos(tan_angle) * -8;
+  }
+
+  draw(stage) {
+    this.move();
+    stage.fillStyle = this.bullet_type;
+    stage.fillRect(this.x_pos, this.y_pos, this.height, this.width);
+  }
+
+}
+
+
+/* harmony default export */ __webpack_exports__["a"] = (Bullet);
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moving_object__ = __webpack_require__(0);
+
+
+
+class Enemy extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */] {
+
+  constructor() {
+    super();
+    this.x_pos = Math.floor(Math.random() * 1600);
+    this.y_pos = Math.floor(Math.random() * 700);
+    this.height = 50;
+    this.width = 50;
+    this.alive = true;
+    this.update_offset();
+  }
+
+  reposition(boss_center) {
+    this.alive = true;
+    this.x_pos = Math.floor(Math.random() * 1600);
+    this.y_pos = Math.floor(Math.random() * 700);
+    this.update_offset();
+    this.update_class_attributes(boss_center);
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Enemy);
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boss__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__warrior__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__wizard__ = __webpack_require__(6);
 
 
 
@@ -130,7 +205,7 @@ class StageView {
 
   addEnemies() {
     for (let i = 0; i < 2 ; i++) {
-      this.enemies.push(new __WEBPACK_IMPORTED_MODULE_1__enemies__["a" /* default */](this.boss.center));
+      this.enemies.push(new __WEBPACK_IMPORTED_MODULE_1__warrior__["a" /* default */](this.boss.center));
       this.enemies.push(new __WEBPACK_IMPORTED_MODULE_2__wizard__["a" /* default */]());
     }
 
@@ -184,7 +259,7 @@ class StageView {
     this.enemies.forEach((enemy) => {
       if (enemy.alive) {
         enemy.draw(this.stage);
-        enemy.update_boss_center(this.boss.center);
+        enemy.update_class_attributes(this.boss.center);
       }
     });
     if (this.slain_enemies.length === this.enemies.length) {
@@ -214,11 +289,11 @@ class StageView {
 
 
 /***/ }),
-/* 2 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bullet__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bullet__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__status__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__moving_object__ = __webpack_require__(0);
 
@@ -382,100 +457,6 @@ class Boss extends __WEBPACK_IMPORTED_MODULE_2__moving_object__["a" /* default *
 
 
 /***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moving_object__ = __webpack_require__(0);
-
-
-class Bullet extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */] {
-
-  constructor(caster_pos, bullet_type, target_x, target_y) {
-    super();
-    this.height = 10;
-    this.width = 10;
-    this.x_pos = caster_pos[0];
-    this.y_pos = caster_pos[1];
-    this.bullet_type = bullet_type;
-    this.target_x = this.x_pos + this.width;
-    this.target_y = this.y_pos + this.height;
-    this.set_velocity(this.x_pos - target_x, this.y_pos - target_y);
-    this.set_center();
-  }
-
-  set_velocity(offset_x, offset_y) {
-    let tan_angle = Math.atan2(offset_x, offset_y);
-    this.x_vel = Math.sin(tan_angle) * -8;
-    this.y_vel = Math.cos(tan_angle) * -8;
-  }
-
-  draw(stage) {
-    this.move();
-    stage.fillStyle = this.bullet_type;
-    stage.fillRect(this.x_pos, this.y_pos, this.height, this.width);
-  }
-
-}
-
-
-/* harmony default export */ __webpack_exports__["a"] = (Bullet);
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moving_object__ = __webpack_require__(0);
-const ENEMY_SPEED = 4;
-
-
-class Enemy extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */] {
-
-  constructor(boss_center) {
-    super();
-    this.x_pos = Math.floor(Math.random() * 1900);
-    this.y_pos = Math.floor(Math.random() * 900);
-    this.height = 50;
-    this.width = 50;
-    this.alive = true;
-    this.update_offset();
-    this.set_velocity(boss_center);
-  }
-
-  draw(stage) {
-    this.move();
-    stage.fillStyle = "red";
-    stage.fillRect(this.x_pos, this.y_pos, this.height, this.width);
-  }
-
-  set_velocity(boss_center) {
-    let triangle_x = boss_center[0] - this.center[0];
-    let triangle_y = boss_center[1] - this.center[1];
-    let tan_angle = Math.atan2(triangle_y, triangle_x);
-    this.x_vel = Math.cos(tan_angle) * ENEMY_SPEED;
-    this.y_vel = Math.sin(tan_angle) * ENEMY_SPEED;
-  }
-
-  reposition(boss_center) {
-    this.alive = true;
-    this.x_pos = Math.floor(Math.random() * 1900);
-    this.y_pos = Math.floor(Math.random() * 900);
-    this.update_offset();
-    this.set_velocity(boss_center);
-  }
-
-  update_boss_center() {
-
-  }
-
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Enemy);
-
-
-/***/ }),
 /* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -513,42 +494,15 @@ class Status {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_stage__ = __webpack_require__(1);
-
-
-const GAME_WIDTH = 1300;
-const GAME_HEIGHT = 800;
-
-document.addEventListener("DOMContentLoaded", function() {
-  var canvas = document.getElementById("gameScreen");
-  canvas.width = GAME_WIDTH;
-  canvas.height = GAME_HEIGHT;
-  const stage = canvas.getContext('2d');
-  new __WEBPACK_IMPORTED_MODULE_0__lib_stage__["a" /* default */](stage);
-});
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moving_object__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bullet__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enemies__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bullet__ = __webpack_require__(1);
 
 
 
-
-class Wizard extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */] {
+class Wizard extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] {
 
   constructor() {
     super();
-    this.x_pos = Math.floor(Math.random() * 1600);
-    this.y_pos = Math.floor(Math.random() * 700);
-    this.alive = true;
-    this.height = 50;
-    this.width = 50;
     this.spells = [];
     this.update_offset();
     this.castSpells();
@@ -572,18 +526,75 @@ class Wizard extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default
     });
   }
 
-  reposition(boss_center) {
-    this.alive = true;
-    this.x_pos = Math.floor(Math.random() * 1600);
-    this.y_pos = Math.floor(Math.random() * 700);
-    this.update_offset();
+  update_class_attributes(boss_center) {
+    this.update_boss_center(boss_center);
   }
-
 
 
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Wizard);
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_stage__ = __webpack_require__(3);
+
+
+const GAME_WIDTH = 1300;
+const GAME_HEIGHT = 800;
+
+document.addEventListener("DOMContentLoaded", function() {
+  var canvas = document.getElementById("gameScreen");
+  canvas.width = GAME_WIDTH;
+  canvas.height = GAME_HEIGHT;
+  const stage = canvas.getContext('2d');
+  new __WEBPACK_IMPORTED_MODULE_0__lib_stage__["a" /* default */](stage);
+});
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enemies__ = __webpack_require__(2);
+
+
+const WARRIOR_SPEED = 6;
+
+class Warrior extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] {
+
+  constructor(boss_center) {
+    super();
+    this.set_velocity(boss_center);
+  }
+
+  set_velocity(boss_center) {
+    let triangle_x = boss_center[0] - this.center[0];
+    let triangle_y = boss_center[1] - this.center[1];
+    let tan_angle = Math.atan2(triangle_y, triangle_x);
+    this.x_vel = Math.cos(tan_angle) * WARRIOR_SPEED;
+    this.y_vel = Math.sin(tan_angle) * WARRIOR_SPEED;
+  }
+
+  update_class_attributes(boss_center) {
+    this.set_velocity(boss_center);
+  }
+
+  draw(stage) {
+    this.move();
+    stage.fillStyle = "red";
+    stage.fillRect(this.x_pos, this.y_pos, this.height, this.width);
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Warrior);
 
 
 /***/ })

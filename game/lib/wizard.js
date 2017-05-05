@@ -1,16 +1,10 @@
-import MovingObject from './moving_object';
+import Enemy from './enemies';
 import Bullet from './bullet';
 
-
-class Wizard extends MovingObject {
+class Wizard extends Enemy {
 
   constructor() {
     super();
-    this.x_pos = Math.floor(Math.random() * 1600);
-    this.y_pos = Math.floor(Math.random() * 700);
-    this.alive = true;
-    this.height = 50;
-    this.width = 50;
     this.spells = [];
     this.update_offset();
     this.castSpells();
@@ -34,13 +28,9 @@ class Wizard extends MovingObject {
     });
   }
 
-  reposition(boss_center) {
-    this.alive = true;
-    this.x_pos = Math.floor(Math.random() * 1600);
-    this.y_pos = Math.floor(Math.random() * 700);
-    this.update_offset();
+  update_class_attributes(boss_center) {
+    this.update_boss_center(boss_center);
   }
-
 
 
 }

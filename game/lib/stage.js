@@ -1,5 +1,5 @@
 import Boss from './boss';
-import Enemy from './enemies';
+import Warrior from './warrior';
 import Wizard from './wizard';
 
 class StageView {
@@ -21,7 +21,7 @@ class StageView {
 
   addEnemies() {
     for (let i = 0; i < 2 ; i++) {
-      this.enemies.push(new Enemy(this.boss.center));
+      this.enemies.push(new Warrior(this.boss.center));
       this.enemies.push(new Wizard());
     }
 
@@ -66,7 +66,7 @@ class StageView {
      requestAnimationFrame(this.animate.bind(this));
 
   }
-
+  
   animate(time) {
     this.stage.clearRect(0, 0, 1300, 800);
     this.stage.fillStyle = '#fde5c6';
@@ -75,7 +75,7 @@ class StageView {
     this.enemies.forEach((enemy) => {
       if (enemy.alive) {
         enemy.draw(this.stage);
-        enemy.update_boss_center(this.boss.center);
+        enemy.update_class_attributes(this.boss.center);
       }
     });
     if (this.slain_enemies.length === this.enemies.length) {
