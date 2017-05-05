@@ -25,12 +25,22 @@ class Boss {
 
   setStatus() {
     this.health = 100;
+    this.energy = 100;
+    setInterval(() => {
+      if (this.energy < 100) {
+        this.energy += 1;
+      }
+    }, 50);
     this.status = new Status();
   }
 
   shootBullet(x_offSet, y_offSet) {
     // debugger
-    this.bullets.push(new Bullet(this.center, x_offSet, y_offSet));
+    if (this.energy >= 10) {
+      this.bullets.push(new Bullet(this.center, x_offSet, y_offSet));
+      this.energy -= 10;
+
+    }
     // console.log(this.bullets);
   }
 
@@ -97,7 +107,7 @@ class Boss {
     this.update_offset();
     this.get_dir();
     this.drawBullets(stage);
-    this.status.draw(stage, this.health);
+    this.status.draw(stage, this.health, this.energy);
     boss_img.src = "./assets/dragon_spritesheet.png";
     if (this.dir === 'east') {
       stage.drawImage(boss_img, 0, 0, 102, 134, this.x_pos, this.y_pos, 102, 134);

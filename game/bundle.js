@@ -205,12 +205,22 @@ class Boss {
 
   setStatus() {
     this.health = 100;
+    this.energy = 100;
+    setInterval(() => {
+      if (this.energy < 100) {
+        this.energy += 1;
+      }
+    }, 50);
     this.status = new __WEBPACK_IMPORTED_MODULE_1__status__["a" /* default */]();
   }
 
   shootBullet(x_offSet, y_offSet) {
     // debugger
-    this.bullets.push(new __WEBPACK_IMPORTED_MODULE_0__bullet__["a" /* default */](this.center, x_offSet, y_offSet));
+    if (this.energy >= 10) {
+      this.bullets.push(new __WEBPACK_IMPORTED_MODULE_0__bullet__["a" /* default */](this.center, x_offSet, y_offSet));
+      this.energy -= 10;
+
+    }
     // console.log(this.bullets);
   }
 
@@ -277,7 +287,7 @@ class Boss {
     this.update_offset();
     this.get_dir();
     this.drawBullets(stage);
-    this.status.draw(stage, this.health);
+    this.status.draw(stage, this.health, this.energy);
     boss_img.src = "./assets/dragon_spritesheet.png";
     if (this.dir === 'east') {
       stage.drawImage(boss_img, 0, 0, 102, 134, this.x_pos, this.y_pos, 102, 134);
@@ -476,13 +486,19 @@ class Status {
 
   }
 
-  draw(stage, health) {
+  draw(stage, health, energy) {
     stage.font = '30px Arial';
     stage.fillText("Health", 10, 40);
     stage.fillStyle = 'black';
     stage.fillRect(9, 49, 302, 22);
     stage.fillStyle = 'red';
     stage.fillRect(10, 50, 3 * health, 20);
+    stage.fillStyle = 'green';
+    stage.fillText("Energy", 10, 100);
+    stage.fillStyle = 'black';
+    stage.fillRect(9, 109, 302, 22);
+    stage.fillStyle = 'green';
+    stage.fillRect(10, 110, 3 * energy, 20);
   }
 
 }
