@@ -18,11 +18,15 @@ class Boss extends MovingObject {
     this.speed = 0.5;
     this.friction = 0.92;
     this.keys = {};
-    this.bullets = [];
+    this.spells = [];
     this.setStatus();
   }
 
 
+  collideWith(other_obj) {
+    return (!((this.x_pos > other_obj.x_offset || this.x_offset < other_obj.x_pos) ||
+      (this.y_pos > other_obj.y_offset || this.y_offset < other_obj.y_pos)));
+  }
   setStatus() {
     this.health = 100;
     this.energy = 100;
@@ -34,15 +38,6 @@ class Boss extends MovingObject {
     this.status = new Status();
   }
 
-  shootBullet(x_offSet, y_offSet) {
-    // debugger
-    if (this.energy >= 10) {
-      this.bullets.push(new Bullet(this.center, 'red', x_offSet, y_offSet));
-      this.energy -= 10;
-
-    }
-    // console.log(this.bullets);
-  }
 
   update_movement() {
     if (this.keys[65] && this.x_vel >= -1 * MAX_SPEED) {
@@ -76,9 +71,19 @@ class Boss extends MovingObject {
     }
   }
 
-  drawBullets(stage) {
-    this.bullets.forEach((bullet) => {
-      bullet.draw(stage);
+  castSpell(x_offSet, y_offSet) {
+    // debugger
+    if (this.energy >= 10) {
+      this.spells.push(new Bullet(this.center, 'red', x_offSet, y_offSet));
+      this.energy -= 10;
+    }
+    console.log(this.spells);
+    // console.log(this.spells);
+  }
+
+  castSpells(stage) {
+    this.spells.forEach((spell) => {
+      spell.draw(stage);
     });
   }
 
@@ -89,7 +94,7 @@ class Boss extends MovingObject {
     this.bind(stage);
     this.update_offset();
     this.get_dir();
-    this.drawBullets(stage);
+    this.castSpells(stage);
     this.status.draw(stage, this.health, this.energy);
     boss_img.src = "./assets/dragon_spritesheet.png";
     if (this.dir === 'east') {

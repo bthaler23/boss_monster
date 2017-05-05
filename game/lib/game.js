@@ -2,7 +2,7 @@ import Boss from './boss';
 import Warrior from './warrior';
 import Wizard from './wizard';
 
-class StageView {
+class Game {
 
   constructor(stage) {
     this.stage = stage;
@@ -22,26 +22,49 @@ class StageView {
   addEnemies() {
     for (let i = 0; i < 2 ; i++) {
       this.enemies.push(new Warrior(this.boss.center));
-      this.enemies.push(new Wizard());
+      this.enemies.push(new Wizard(this.boss.center));
     }
 
   }
 
   detectCollisions() {
+    window.enemies = this.enemies;
     this.enemies.forEach((enemy) => {
       if (enemy.alive) {
-        if (!((enemy.x_pos > this.boss.x_offset || enemy.x_offset < this.boss.x_pos) ||
-        (enemy.y_pos > this.boss.y_offset || enemy.y_offset < this.boss.y_pos))) {
-          this.slain_enemies.push(enemy);
-          enemy.alive = false;
-          this.boss.health -= 20;
+        if (enemy.collideWith(this.boss)) {
+            this.slain_enemies.push(enemy);
+            enemy.alive = false;
+            this.boss.health -= 20;
         } else {
-          this.boss.bullets.forEach((bullet) => {
-            if (!((enemy.x_pos > bullet.x_offset || enemy.x_offset < bullet.x_pos) ||
-            (enemy.y_pos > bullet.y_offset || enemy.y_offset < bullet.y_pos))) {
+          let hit_spells = [];
+          //LOOK AT THIS SHIT FIGURE IT OUT
+          this.boss.spells.forEach((spell, i) => {
+            if (enemy.collideWith(spell)) {
+              spell.hit = true;
               this.slain_enemies.push(enemy);
               enemy.alive = false;
+              }
+            if (spell.hit) {
+              hit_spells.push(i);
             }
+          });
+          hit_spells.forEach((spell_number) => {
+            this.boss.spells.splice(spell_number, 1);
+          });
+        }
+        if (enemy.constructor.name === 'Wizard') {
+          let hit_spells = [];
+          enemy.spells.forEach((spell, i) => {
+            if (this.boss.collideWith(spell)) {
+              spell.hit = true;
+              this.boss.health -= 20;
+              if (spell.hit) {
+                hit_spells.push(i);
+              }
+            }
+          });
+          hit_spells.forEach((spell_number) => {
+              enemy.spells.splice(spell_number, 1);
           });
         }
       }
@@ -58,7 +81,7 @@ class StageView {
     });
     this.stage.canvas.addEventListener('click', (e) => {
       // debugger
-      this.boss.shootBullet(e.offsetX, e.offsetY);
+      this.boss.castSpell(e.offsetX, e.offsetY);
     });
   }
 
@@ -66,7 +89,7 @@ class StageView {
      requestAnimationFrame(this.animate.bind(this));
 
   }
-  
+
   animate(time) {
     this.stage.clearRect(0, 0, 1300, 800);
     this.stage.fillStyle = '#fde5c6';
@@ -75,7 +98,7 @@ class StageView {
     this.enemies.forEach((enemy) => {
       if (enemy.alive) {
         enemy.draw(this.stage);
-        enemy.update_class_attributes(this.boss.center);
+        enemy.update_boss_pos(this.boss.center);
       }
     });
     if (this.slain_enemies.length === this.enemies.length) {
@@ -92,6 +115,7 @@ class StageView {
   refresh_enemies() {
     this.slain_enemies = [];
     this.enemies.forEach((enemy) => {
+      // enemy.update_boss_pos(this.boss.center);
       enemy.reposition(this.boss.center);
     });
   }
@@ -101,4 +125,4 @@ class StageView {
 
 }
 
-export default StageView;
+export default Game;

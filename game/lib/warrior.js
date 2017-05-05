@@ -5,24 +5,26 @@ const WARRIOR_SPEED = 6;
 class Warrior extends Enemy {
 
   constructor(boss_center) {
-    super();
-    this.set_velocity(boss_center);
+    super(boss_center);
+    this.set_velocity(this.boss_pos);
   }
 
-  set_velocity(boss_center) {
-    let triangle_x = boss_center[0] - this.center[0];
-    let triangle_y = boss_center[1] - this.center[1];
+  set_velocity() {
+    let triangle_x = this.boss_pos[0] - this.center[0];
+    let triangle_y = this.boss_pos[1] - this.center[1];
     let tan_angle = Math.atan2(triangle_y, triangle_x);
     this.x_vel = Math.cos(tan_angle) * WARRIOR_SPEED;
     this.y_vel = Math.sin(tan_angle) * WARRIOR_SPEED;
   }
 
-  update_class_attributes(boss_center) {
-    this.set_velocity(boss_center);
+  update_class_attributes(boss_pos) {
+      this.update_boss_pos(boss_pos);
+      this.set_velocity();
   }
 
   draw(stage) {
     this.move();
+    this.bind(stage);
     stage.fillStyle = "red";
     stage.fillRect(this.x_pos, this.y_pos, this.height, this.width);
   }
