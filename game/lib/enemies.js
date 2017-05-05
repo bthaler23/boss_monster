@@ -3,8 +3,8 @@ const ENEMY_SPEED = 4;
 class Enemy {
 
   constructor(boss_center) {
-    this.x_pos = Math.floor(Math.random() * 1500);
-    this.y_pos = Math.floor(Math.random() * 600);
+    this.x_pos = Math.floor(Math.random() * 1900);
+    this.y_pos = Math.floor(Math.random() * 900);
     this.height = 50;
     this.width = 50;
     this.alive = true;
@@ -36,7 +36,7 @@ class Enemy {
   }
 
   calculate_tan(boss_center) {
-    let triangle_x = boss_center[0]- this.center[0];
+    let triangle_x = boss_center[0] - this.center[0];
     let triangle_y = boss_center[1] - this.center[1];
     let tan_angle = Math.atan2(triangle_y, triangle_x);
     this.x_vel = Math.cos(tan_angle) * ENEMY_SPEED;
@@ -45,8 +45,8 @@ class Enemy {
 
   reposition(boss_center) {
     this.alive = true;
-    this.x_pos = Math.floor(Math.random() * 1500);
-    this.y_pos = Math.floor(Math.random() * 700);
+    this.x_pos = Math.floor(Math.random() * 1900);
+    this.y_pos = Math.floor(Math.random() * 900);
     this.update_offset();
     this.calculate_tan(boss_center);
   }

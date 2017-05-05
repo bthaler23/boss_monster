@@ -15,14 +15,15 @@ class Boss {
     this.y_offset = this.y_pos + this.height;
     this.set_center();
     this.speed = 0.5;
-    this.friction = 0.95;
+    this.friction = 0.92;
     this.keys = {};
     this.bullets = [];
   }
 
-  shootBullet() {
-    this.bullets.push(new Bullet(this.center));
-    console.log(this.bullets);
+  shootBullet(x_offSet, y_offSet) {
+    // debugger
+    this.bullets.push(new Bullet(this.center, x_offSet, y_offSet));
+    // console.log(this.bullets);
   }
 
   set_center() {
@@ -30,16 +31,16 @@ class Boss {
   }
 
   update_movement() {
-    if (this.keys[37] && this.x_vel >= -1 * MAX_SPEED) {
+    if (this.keys[65] && this.x_vel >= -1 * MAX_SPEED) {
       this.x_vel -= this.speed;
     }
-    if (this.keys[38] && this.y_vel >= -1 * MAX_SPEED) {
-      this.y_vel -= this.speed;
-    }
-    if (this.keys[39] && this.x_vel <= MAX_SPEED) {
+    if (this.keys[68] && this.x_vel <= MAX_SPEED) {
       this.x_vel += this.speed;
     }
-    if (this.keys[40] && this.y_vel <= MAX_SPEED) {
+    if (this.keys[87] && this.y_vel >= -1 * MAX_SPEED) {
+      this.y_vel -= this.speed;
+    }
+    if (this.keys[83] && this.y_vel <= MAX_SPEED) {
       this.y_vel += this.speed;
     }
     this.x_vel *= this.friction;

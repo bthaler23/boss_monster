@@ -25,11 +25,22 @@ class StageView {
 
   detectCollisions() {
     this.enemies.forEach((enemy) => {
-      if (!((enemy.x_pos > this.boss.x_offset || enemy.x_offset < this.boss.x_pos) ||
-      (enemy.y_pos > this.boss.y_offset || enemy.y_offset < this.boss.y_pos))) {
-        if (enemy.alive) {this.slain_enemies.push(enemy);}
-        enemy.alive = false;
+      if (enemy.alive) {
+        if (!((enemy.x_pos > this.boss.x_offset || enemy.x_offset < this.boss.x_pos) ||
+        (enemy.y_pos > this.boss.y_offset || enemy.y_offset < this.boss.y_pos))) {
+          this.slain_enemies.push(enemy);
+          enemy.alive = false;
+        } else {
+          this.boss.bullets.forEach((bullet) => {
+            if (!((enemy.x_pos > bullet.x_offset || enemy.x_offset < bullet.x_pos) ||
+            (enemy.y_pos > bullet.y_offset || enemy.y_offset < bullet.y_pos))) {
+              this.slain_enemies.push(enemy);
+              enemy.alive = false;
+            }
+          });
+        }
       }
+
     });
   }
 
@@ -40,10 +51,9 @@ class StageView {
     document.getElementsByTagName("body")[0].addEventListener("keyup", (e) => {
       this.boss.keys[e.keyCode] = false;
     });
-    document.getElementsByTagName("body")[0].addEventListener("keypress", (e) => {
-      if (e.keyCode === 32) {
-        this.boss.shootBullet();
-      }
+    this.stage.canvas.addEventListener('click', (e) => {
+      // debugger
+      this.boss.shootBullet(e.offsetX, e.offsetY);
     });
   }
 
@@ -53,9 +63,9 @@ class StageView {
   }
 
   animate(time) {
-    this.stage.clearRect(0, 0, 1300, 500);
+    this.stage.clearRect(0, 0, 1300, 800);
     this.stage.fillStyle = '#fde5c6';
-    this.stage.fillRect(0, 0, 1300, 500);
+    this.stage.fillRect(0, 0, 1300, 800);
     this.enemies.forEach((enemy) => {
       if (enemy.alive) {
         enemy.draw(this.stage);

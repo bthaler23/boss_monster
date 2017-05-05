@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -72,7 +72,7 @@
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boss__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__enemies__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__enemies__ = __webpack_require__(3);
 
 
 
@@ -100,11 +100,22 @@ class StageView {
 
   detectCollisions() {
     this.enemies.forEach((enemy) => {
-      if (!((enemy.x_pos > this.boss.x_offset || enemy.x_offset < this.boss.x_pos) ||
-      (enemy.y_pos > this.boss.y_offset || enemy.y_offset < this.boss.y_pos))) {
-        if (enemy.alive) {this.slain_enemies.push(enemy);}
-        enemy.alive = false;
+      if (enemy.alive) {
+        if (!((enemy.x_pos > this.boss.x_offset || enemy.x_offset < this.boss.x_pos) ||
+        (enemy.y_pos > this.boss.y_offset || enemy.y_offset < this.boss.y_pos))) {
+          this.slain_enemies.push(enemy);
+          enemy.alive = false;
+        } else {
+          this.boss.bullets.forEach((bullet) => {
+            if (!((enemy.x_pos > bullet.x_offset || enemy.x_offset < bullet.x_pos) ||
+            (enemy.y_pos > bullet.y_offset || enemy.y_offset < bullet.y_pos))) {
+              this.slain_enemies.push(enemy);
+              enemy.alive = false;
+            }
+          });
+        }
       }
+
     });
   }
 
@@ -115,10 +126,9 @@ class StageView {
     document.getElementsByTagName("body")[0].addEventListener("keyup", (e) => {
       this.boss.keys[e.keyCode] = false;
     });
-    document.getElementsByTagName("body")[0].addEventListener("keypress", (e) => {
-      if (e.keyCode === 32) {
-        this.boss.shootBullet();
-      }
+    this.stage.canvas.addEventListener('click', (e) => {
+      // debugger
+      this.boss.shootBullet(e.offsetX, e.offsetY);
     });
   }
 
@@ -128,9 +138,9 @@ class StageView {
   }
 
   animate(time) {
-    this.stage.clearRect(0, 0, 1300, 500);
+    this.stage.clearRect(0, 0, 1300, 800);
     this.stage.fillStyle = '#fde5c6';
-    this.stage.fillRect(0, 0, 1300, 500);
+    this.stage.fillRect(0, 0, 1300, 800);
     this.enemies.forEach((enemy) => {
       if (enemy.alive) {
         enemy.draw(this.stage);
@@ -164,7 +174,7 @@ class StageView {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bullet__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bullet__ = __webpack_require__(2);
 
 const MAX_SPEED = 3;
 
@@ -182,14 +192,15 @@ class Boss {
     this.y_offset = this.y_pos + this.height;
     this.set_center();
     this.speed = 0.5;
-    this.friction = 0.95;
+    this.friction = 0.92;
     this.keys = {};
     this.bullets = [];
   }
 
-  shootBullet() {
-    this.bullets.push(new __WEBPACK_IMPORTED_MODULE_0__bullet__["a" /* default */](this.center));
-    console.log(this.bullets);
+  shootBullet(x_offSet, y_offSet) {
+    // debugger
+    this.bullets.push(new __WEBPACK_IMPORTED_MODULE_0__bullet__["a" /* default */](this.center, x_offSet, y_offSet));
+    // console.log(this.bullets);
   }
 
   set_center() {
@@ -197,16 +208,16 @@ class Boss {
   }
 
   update_movement() {
-    if (this.keys[37] && this.x_vel >= -1 * MAX_SPEED) {
+    if (this.keys[65] && this.x_vel >= -1 * MAX_SPEED) {
       this.x_vel -= this.speed;
     }
-    if (this.keys[38] && this.y_vel >= -1 * MAX_SPEED) {
-      this.y_vel -= this.speed;
-    }
-    if (this.keys[39] && this.x_vel <= MAX_SPEED) {
+    if (this.keys[68] && this.x_vel <= MAX_SPEED) {
       this.x_vel += this.speed;
     }
-    if (this.keys[40] && this.y_vel <= MAX_SPEED) {
+    if (this.keys[87] && this.y_vel >= -1 * MAX_SPEED) {
+      this.y_vel -= this.speed;
+    }
+    if (this.keys[83] && this.y_vel <= MAX_SPEED) {
       this.y_vel += this.speed;
     }
     this.x_vel *= this.friction;
@@ -327,13 +338,69 @@ class Boss {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+class Bullet {
+
+  constructor(boss_pos, x_offset, y_offset) {
+    this.height = 10;
+    this.width = 10;
+    this.x_pos = boss_pos[0];
+    this.y_pos = boss_pos[1];
+    this.x_offset = this.x_pos + this.width;
+    this.y_offset = this.y_pos + this.height;
+    this.set_velocity(this.x_pos - x_offset, this.y_pos - y_offset);
+    this.set_center();
+  }
+
+  set_velocity(x_offset, y_offset) {
+    let tan_angle = Math.atan2(x_offset, y_offset);
+    // console.log(tan_angle / Math.PI * 180);
+    this.x_vel = Math.sin(tan_angle) * -8;
+    this.y_vel = Math.cos(tan_angle) * -8;
+    // console.log(this.y_vel);
+    // debugger
+  }
+
+  set_center() {
+    this.center = [(this.x_offset + this.x_pos)/2, (this.y_offset + this.y_pos)/2];
+  }
+
+  update_offset() {
+    this.x_offset = this.x_pos + this.width;
+    this.y_offset = this.y_pos + this.height;
+    this.set_center();
+    // console.log(this.center);
+  }
+
+  update_movement() {
+    this.x_pos += this.x_vel;
+    this.y_pos += this.y_vel;
+  }
+
+  draw(stage) {
+    this.update_movement();
+    this.update_offset();
+    stage.fillStyle = "red";
+    stage.fillRect(this.x_pos, this.y_pos, this.height, this.width);
+  }
+
+}
+
+
+/* harmony default export */ __webpack_exports__["a"] = (Bullet);
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 const ENEMY_SPEED = 4;
 
 class Enemy {
 
   constructor(boss_center) {
-    this.x_pos = Math.floor(Math.random() * 1500);
-    this.y_pos = Math.floor(Math.random() * 600);
+    this.x_pos = Math.floor(Math.random() * 1900);
+    this.y_pos = Math.floor(Math.random() * 900);
     this.height = 50;
     this.width = 50;
     this.alive = true;
@@ -365,7 +432,7 @@ class Enemy {
   }
 
   calculate_tan(boss_center) {
-    let triangle_x = boss_center[0]- this.center[0];
+    let triangle_x = boss_center[0] - this.center[0];
     let triangle_y = boss_center[1] - this.center[1];
     let tan_angle = Math.atan2(triangle_y, triangle_x);
     this.x_vel = Math.cos(tan_angle) * ENEMY_SPEED;
@@ -374,8 +441,8 @@ class Enemy {
 
   reposition(boss_center) {
     this.alive = true;
-    this.x_pos = Math.floor(Math.random() * 1500);
-    this.y_pos = Math.floor(Math.random() * 700);
+    this.x_pos = Math.floor(Math.random() * 1900);
+    this.y_pos = Math.floor(Math.random() * 900);
     this.update_offset();
     this.calculate_tan(boss_center);
   }
@@ -386,7 +453,7 @@ class Enemy {
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -395,7 +462,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 const GAME_WIDTH = 1300;
-const GAME_HEIGHT = 500;
+const GAME_HEIGHT = 800;
 
 document.addEventListener("DOMContentLoaded", function() {
   var canvas = document.getElementById("gameScreen");
@@ -404,31 +471,6 @@ document.addEventListener("DOMContentLoaded", function() {
   const stage = canvas.getContext('2d');
   new __WEBPACK_IMPORTED_MODULE_0__lib_stage__["a" /* default */](stage);
 });
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-class Bullet {
-
-  constructor(boss_pos) {
-    this.height = 10;
-    this.width = 10;
-    this.x_pos = boss_pos[0];
-    this.y_pos = boss_pos[1];
-  }
-
-  draw(stage) {
-    stage.fillStyle = "red";
-    stage.fillRect(this.x_pos, this.y_pos, this.height, this.width);
-  }
-
-}
-
-
-/* harmony default export */ __webpack_exports__["a"] = (Bullet);
 
 
 /***/ })
