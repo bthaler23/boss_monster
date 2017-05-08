@@ -148,10 +148,11 @@ class Bullet extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default
   }
 
   draw(stage) {
+    let spell_img = new Image();
+    spell_img.src = "./assets/fireball.png";
     this.move();
     this.bind(stage);
-    stage.fillStyle = this.bullet_type;
-    stage.fillRect(this.x_pos, this.y_pos, this.height, this.width);
+    stage.drawImage(spell_img, this.x_pos, this.y_pos);
   }
 
 }
@@ -176,8 +177,8 @@ class Enemy extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default 
     this.update_boss_pos(boss_pos);
     this.x_pos = Math.floor(Math.random() * 1600);
     this.y_pos = Math.floor(Math.random() * 700);
-    this.height = 50;
-    this.width = 50;
+    this.height = 200;
+    this.width = 200;
     this.alive = true;
     this.update_offset();
   }
@@ -580,6 +581,9 @@ class Warrior extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] 
   constructor(boss_center) {
     super(boss_center);
     this.set_velocity(this.boss_pos);
+    this.height = 200;
+    this.width = 200;
+
   }
 
   set_velocity() {
@@ -596,10 +600,16 @@ class Warrior extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] 
   }
 
   draw(stage) {
+    let warrior_img = new Image();
+    warrior_img.src = "./assets/warrior.png";
+    // window.warrior = warrior_img;
     this.move();
     this.bind(stage);
-    stage.fillStyle = "red";
-    stage.fillRect(this.x_pos, this.y_pos, this.height, this.width);
+    stage.save();
+    // stage.translate(stage.canvas.width/2, stage.canvas.height/2);
+    // stage.rotate(Math.PI/4);
+    stage.drawImage(warrior_img, this.x_pos, this.y_pos);
+    stage.restore();
   }
 
 }
@@ -637,8 +647,9 @@ class Wizard extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] {
 
   draw(stage) {
     this.bind(stage);
-    stage.fillStyle = "blue";
-    stage.fillRect(this.x_pos, this.y_pos, this.height, this.width);
+    let mage_img = new Image();
+    mage_img.src = "./assets/wizard.png";
+    stage.drawImage(mage_img, this.x_pos, this.y_pos);
     this.spells.forEach((spell) => {
       spell.draw(stage);
     });

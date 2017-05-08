@@ -21,8 +21,9 @@ class Wizard extends Enemy {
 
   draw(stage) {
     this.bind(stage);
-    stage.fillStyle = "blue";
-    stage.fillRect(this.x_pos, this.y_pos, this.height, this.width);
+    let mage_img = new Image();
+    mage_img.src = "./assets/wizard.png";
+    stage.drawImage(mage_img, this.x_pos, this.y_pos);
     this.spells.forEach((spell) => {
       spell.draw(stage);
     });

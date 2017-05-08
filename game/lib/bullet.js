@@ -41,10 +41,11 @@ class Bullet extends MovingObject {
   }
 
   draw(stage) {
+    let spell_img = new Image();
+    spell_img.src = "./assets/fireball.png";
     this.move();
     this.bind(stage);
-    stage.fillStyle = this.bullet_type;
-    stage.fillRect(this.x_pos, this.y_pos, this.height, this.width);
+    stage.drawImage(spell_img, this.x_pos, this.y_pos);
   }
 
 }

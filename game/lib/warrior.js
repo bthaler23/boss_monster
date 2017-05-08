@@ -7,6 +7,9 @@ class Warrior extends Enemy {
   constructor(boss_center) {
     super(boss_center);
     this.set_velocity(this.boss_pos);
+    this.height = 200;
+    this.width = 200;
+
   }
 
   set_velocity() {
@@ -23,10 +26,16 @@ class Warrior extends Enemy {
   }
 
   draw(stage) {
+    let warrior_img = new Image();
+    warrior_img.src = "./assets/warrior.png";
+    // window.warrior = warrior_img;
     this.move();
     this.bind(stage);
-    stage.fillStyle = "red";
-    stage.fillRect(this.x_pos, this.y_pos, this.height, this.width);
+    stage.save();
+    // stage.translate(stage.canvas.width/2, stage.canvas.height/2);
+    // stage.rotate(Math.PI/4);
+    stage.drawImage(warrior_img, this.x_pos, this.y_pos);
+    stage.restore();
   }
 
 }

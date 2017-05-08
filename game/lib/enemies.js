@@ -8,8 +8,8 @@ class Enemy extends MovingObject {
     this.update_boss_pos(boss_pos);
     this.x_pos = Math.floor(Math.random() * 1600);
     this.y_pos = Math.floor(Math.random() * 700);
-    this.height = 50;
-    this.width = 50;
+    this.height = 200;
+    this.width = 200;
     this.alive = true;
     this.update_offset();
   }
