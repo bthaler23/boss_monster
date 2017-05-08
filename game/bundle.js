@@ -107,7 +107,7 @@ class MovingObject {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moving_object__ = __webpack_require__(0);
 
 
-const BULLET_SPEED = -5;
+const BULLET_SPEED = -6;
 
 class Bullet extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */] {
 
@@ -151,7 +151,11 @@ class Bullet extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default
 
   draw(stage) {
     let spell_img = new Image();
-    spell_img.src = "./assets/fireball.png";
+    if (this.bullet_type === 'fireball') {
+      spell_img.src = "./assets/fireball.png";
+    } else {
+      spell_img.src = "./assets/frostball.png";
+    }
     this.move();
     this.bind(stage);
     // stage.fillStyle='black';
@@ -369,6 +373,7 @@ class Game {
 
   refresh_enemies() {
     this.timeout = false;
+    // this.boss.health += (this.boss.health%100)/2;
     this.slain_enemies = [];
     this.enemies.forEach((enemy) => {
       // enemy.update_boss_pos(this.boss.center);
@@ -665,15 +670,19 @@ class Wizard extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] {
     this.update_boss_pos(boss_center);
     this.spells = [];
     this.update_offset();
-    this.castSpells();
+    setTimeout(() => {
+      this.castSpells();
+    }, 500);
   }
 
   castSpells() {
     // debugger
     setInterval(() => {
-      // debugger
-      this.spells.push(new __WEBPACK_IMPORTED_MODULE_1__bullet__["a" /* default */](this.center, 'blue', this.boss_pos[0], this.boss_pos[1]));
-    }, 1000);
+      if (this.alive) {
+        this.spells.push(new __WEBPACK_IMPORTED_MODULE_1__bullet__["a" /* default */](this.center, 'fireball', this.boss_pos[0], this.boss_pos[1]));
+      }
+    }, 1500);
+
   }
 
   draw(stage) {
@@ -695,6 +704,7 @@ class Wizard extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] {
   }
 
   update_class_attributes(boss_center) {
+    this.spells = [];
     this.update_boss_pos(boss_center);
   }
 

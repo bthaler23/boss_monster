@@ -1,6 +1,6 @@
 import MovingObject from './moving_object';
 
-const BULLET_SPEED = -5;
+const BULLET_SPEED = -6;
 
 class Bullet extends MovingObject {
 
@@ -44,7 +44,11 @@ class Bullet extends MovingObject {
 
   draw(stage) {
     let spell_img = new Image();
-    spell_img.src = "./assets/fireball.png";
+    if (this.bullet_type === 'fireball') {
+      spell_img.src = "./assets/fireball.png";
+    } else {
+      spell_img.src = "./assets/frostball.png";
+    }
     this.move();
     this.bind(stage);
     // stage.fillStyle='black';

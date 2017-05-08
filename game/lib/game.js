@@ -120,6 +120,7 @@ class Game {
 
   refresh_enemies() {
     this.timeout = false;
+    // this.boss.health += (this.boss.health%100)/2;
     this.slain_enemies = [];
     this.enemies.forEach((enemy) => {
       // enemy.update_boss_pos(this.boss.center);
