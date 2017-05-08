@@ -107,13 +107,15 @@ class MovingObject {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moving_object__ = __webpack_require__(0);
 
 
+const BULLET_SPEED = -5;
+
 class Bullet extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default */] {
 
   constructor(caster_pos, bullet_type, target_x, target_y) {
     super();
     // debugger
-    this.height = 10;
-    this.width = 10;
+    this.height = 14;
+    this.width = 13;
     this.x_pos = caster_pos[0];
     this.y_pos = caster_pos[1];
     this.bullet_type = bullet_type;
@@ -143,8 +145,8 @@ class Bullet extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default
 
   set_velocity(offset_x, offset_y) {
     let tan_angle = Math.atan2(offset_x, offset_y);
-    this.x_vel = Math.sin(tan_angle) * -8;
-    this.y_vel = Math.cos(tan_angle) * -8;
+    this.x_vel = Math.sin(tan_angle) * BULLET_SPEED;
+    this.y_vel = Math.cos(tan_angle) * BULLET_SPEED;
   }
 
   draw(stage) {
@@ -152,7 +154,9 @@ class Bullet extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default
     spell_img.src = "./assets/fireball.png";
     this.move();
     this.bind(stage);
+    // stage.fillStyle='black';
     stage.drawImage(spell_img, this.x_pos, this.y_pos);
+    // stage.fillRect(this.x_pos, this.y_pos, this.width, this.height);
   }
 
 }
@@ -175,12 +179,26 @@ class Enemy extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default 
   constructor(boss_pos) {
     super();
     this.update_boss_pos(boss_pos);
-    this.x_pos = Math.floor(Math.random() * 1600);
-    this.y_pos = Math.floor(Math.random() * 700);
+    this.generate_pos();
     this.height = 200;
     this.width = 200;
     this.alive = true;
     this.update_offset();
+  }
+
+  generate_pos() {
+    let x_generator = Math.floor(Math.random() * 2);
+    if (x_generator === 1) {
+      this.x_pos = Math.floor(Math.random() * 1700 - 1500) + 1500;
+    } else {
+      this.x_pos = Math.floor(Math.random() * 150);
+    }
+    let y_generator = Math.floor(Math.random() * 2);
+    if (y_generator == 1) {
+      this.y_pos = Math.floor(Math.random() * 100);
+    } else {
+      this.y_pos = Math.floor(Math.random() * 800 - 700) + 700;
+    }
   }
 
   bind(stage) {
@@ -211,8 +229,7 @@ class Enemy extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default 
 
   reposition(boss_pos) {
     this.alive = true;
-    this.x_pos = Math.floor(Math.random() * 1600);
-    this.y_pos = Math.floor(Math.random() * 700);
+    this.generate_pos();
     this.update_offset();
     this.update_class_attributes(boss_pos);
   }
@@ -244,6 +261,9 @@ class Game {
     this.addEnemies();
     this.addKeyEvents();
     this.start();
+    //Timeout toggle so I can refresh appropriatly
+    this.timeout = false;
+    this.refresh_enemies = this.refresh_enemies.bind(this);
   }
 
 
@@ -334,7 +354,10 @@ class Game {
       }
     });
     if (this.slain_enemies.length === this.enemies.length) {
-      this.refresh_enemies();
+      if (this.timeout === false) {
+        this.timeout = true;
+        setTimeout(() => (this.refresh_enemies()), 1500);
+      }
     }
 
     this.boss.draw(this.stage);
@@ -345,6 +368,7 @@ class Game {
   }
 
   refresh_enemies() {
+    this.timeout = false;
     this.slain_enemies = [];
     this.enemies.forEach((enemy) => {
       // enemy.update_boss_pos(this.boss.center);
@@ -581,17 +605,17 @@ class Warrior extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] 
   constructor(boss_center) {
     super(boss_center);
     this.set_velocity(this.boss_pos);
-    this.height = 200;
-    this.width = 200;
+    this.height = 120;
+    this.width = 120;
 
   }
 
   set_velocity() {
     let triangle_x = this.boss_pos[0] - this.center[0];
     let triangle_y = this.boss_pos[1] - this.center[1];
-    let tan_angle = Math.atan2(triangle_y, triangle_x);
-    this.x_vel = Math.cos(tan_angle) * WARRIOR_SPEED;
-    this.y_vel = Math.sin(tan_angle) * WARRIOR_SPEED;
+    this.tan_angle = Math.atan2(triangle_y, triangle_x);
+    this.x_vel = Math.cos(this.tan_angle) * WARRIOR_SPEED;
+    this.y_vel = Math.sin(this.tan_angle) * WARRIOR_SPEED;
   }
 
   update_class_attributes(boss_pos) {
@@ -606,6 +630,11 @@ class Warrior extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] 
     this.move();
     this.bind(stage);
     stage.save();
+    stage.translate(this.center[0], this.center[1]);
+    stage.rotate(this.tan_angle);
+    stage.translate(-(this.center[0]), -this.center[1]);
+    // stage.fillStyle='black';
+    // stage.fillRect(this.x_pos, this.y_pos, this.width, this.height);
     // stage.translate(stage.canvas.width/2, stage.canvas.height/2);
     // stage.rotate(Math.PI/4);
     stage.drawImage(warrior_img, this.x_pos, this.y_pos);
@@ -631,6 +660,8 @@ class Wizard extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] {
 
   constructor(boss_center) {
     super(boss_center);
+    this.height = 130;
+    this.width = 145;
     this.update_boss_pos(boss_center);
     this.spells = [];
     this.update_offset();
@@ -649,7 +680,15 @@ class Wizard extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] {
     this.bind(stage);
     let mage_img = new Image();
     mage_img.src = "./assets/wizard.png";
+    let triangle_x = this.boss_pos[0] - this.center[0];
+    let triangle_y = this.boss_pos[1] - this.center[1];
+    let tan_angle = Math.atan2(triangle_y, triangle_x);
+    stage.save();
+    stage.translate(this.center[0], this.center[1]);
+    stage.rotate(tan_angle);
+    stage.translate(-(this.center[0]), -this.center[1]);
     stage.drawImage(mage_img, this.x_pos, this.y_pos);
+    stage.restore();
     this.spells.forEach((spell) => {
       spell.draw(stage);
     });

@@ -12,6 +12,9 @@ class Game {
     this.addEnemies();
     this.addKeyEvents();
     this.start();
+    //Timeout toggle so I can refresh appropriatly
+    this.timeout = false;
+    this.refresh_enemies = this.refresh_enemies.bind(this);
   }
 
 
@@ -102,7 +105,10 @@ class Game {
       }
     });
     if (this.slain_enemies.length === this.enemies.length) {
-      this.refresh_enemies();
+      if (this.timeout === false) {
+        this.timeout = true;
+        setTimeout(() => (this.refresh_enemies()), 1500);
+      }
     }
 
     this.boss.draw(this.stage);
@@ -113,6 +119,7 @@ class Game {
   }
 
   refresh_enemies() {
+    this.timeout = false;
     this.slain_enemies = [];
     this.enemies.forEach((enemy) => {
       // enemy.update_boss_pos(this.boss.center);

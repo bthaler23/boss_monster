@@ -6,12 +6,26 @@ class Enemy extends MovingObject {
   constructor(boss_pos) {
     super();
     this.update_boss_pos(boss_pos);
-    this.x_pos = Math.floor(Math.random() * 1600);
-    this.y_pos = Math.floor(Math.random() * 700);
+    this.generate_pos();
     this.height = 200;
     this.width = 200;
     this.alive = true;
     this.update_offset();
+  }
+
+  generate_pos() {
+    let x_generator = Math.floor(Math.random() * 2);
+    if (x_generator === 1) {
+      this.x_pos = Math.floor(Math.random() * 1700 - 1500) + 1500;
+    } else {
+      this.x_pos = Math.floor(Math.random() * 150);
+    }
+    let y_generator = Math.floor(Math.random() * 2);
+    if (y_generator == 1) {
+      this.y_pos = Math.floor(Math.random() * 100);
+    } else {
+      this.y_pos = Math.floor(Math.random() * 800 - 700) + 700;
+    }
   }
 
   bind(stage) {
@@ -42,8 +56,7 @@ class Enemy extends MovingObject {
 
   reposition(boss_pos) {
     this.alive = true;
-    this.x_pos = Math.floor(Math.random() * 1600);
-    this.y_pos = Math.floor(Math.random() * 700);
+    this.generate_pos();
     this.update_offset();
     this.update_class_attributes(boss_pos);
   }

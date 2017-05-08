@@ -1,12 +1,14 @@
 import MovingObject from './moving_object';
 
+const BULLET_SPEED = -5;
+
 class Bullet extends MovingObject {
 
   constructor(caster_pos, bullet_type, target_x, target_y) {
     super();
     // debugger
-    this.height = 10;
-    this.width = 10;
+    this.height = 14;
+    this.width = 13;
     this.x_pos = caster_pos[0];
     this.y_pos = caster_pos[1];
     this.bullet_type = bullet_type;
@@ -36,8 +38,8 @@ class Bullet extends MovingObject {
 
   set_velocity(offset_x, offset_y) {
     let tan_angle = Math.atan2(offset_x, offset_y);
-    this.x_vel = Math.sin(tan_angle) * -8;
-    this.y_vel = Math.cos(tan_angle) * -8;
+    this.x_vel = Math.sin(tan_angle) * BULLET_SPEED;
+    this.y_vel = Math.cos(tan_angle) * BULLET_SPEED;
   }
 
   draw(stage) {
@@ -45,7 +47,9 @@ class Bullet extends MovingObject {
     spell_img.src = "./assets/fireball.png";
     this.move();
     this.bind(stage);
+    // stage.fillStyle='black';
     stage.drawImage(spell_img, this.x_pos, this.y_pos);
+    // stage.fillRect(this.x_pos, this.y_pos, this.width, this.height);
   }
 
 }
