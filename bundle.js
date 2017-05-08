@@ -63,77 +63,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__game__ = __webpack_require__(6);
-
-
-class StartScreen {
-
-  constructor(stage) {
-    this.draw(stage);
-    this.stage = stage;
-    document.addEventListener("keyup", this.startGame());
-  }
-
-  startGame() {
-    const handler = function(e) {
-      if (e.keyCode === 13) {
-        document.removeEventListener("keyup", handler);
-        new __WEBPACK_IMPORTED_MODULE_0__game__["a" /* default */](this.stage);
-      }
-    }.bind(this);
-
-    return handler;
-  }
-
-  draw(stage) {
-    stage.clearRect(0, 0, 1300, 800);
-    stage.font = "100px Arial";
-    stage.fillStyle = '#0e1282';
-    stage.fillRect(0, 0, 1300, 800);
-    stage.fillStyle = 'black';
-    stage.textAlign="center";
-    stage.fillText("Nexus", 650, 300);
-    stage.font = "50px Arial";
-    stage.fillText("Press Enter to Play", 650, 500);
-    stage.textAlign="start";
-  }
-
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (StartScreen);
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_start_screen__ = __webpack_require__(0);
-
-
-const GAME_WIDTH = 1300;
-const GAME_HEIGHT = 800;
-
-document.addEventListener("DOMContentLoaded", function() {
-  var canvas = document.getElementById("gameScreen");
-  canvas.width = GAME_WIDTH;
-  canvas.height = GAME_HEIGHT;
-  const stage = canvas.getContext('2d');
-  new __WEBPACK_IMPORTED_MODULE_0__lib_start_screen__["a" /* default */](stage);
-});
-
-
-/***/ }),
-/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -166,11 +100,11 @@ class MovingObject {
 
 
 /***/ }),
-/* 3 */
+/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moving_object__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moving_object__ = __webpack_require__(0);
 
 
 const BULLET_SPEED = -6;
@@ -218,9 +152,9 @@ class Bullet extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default
   draw(stage) {
     let spell_img = new Image();
     if (this.bullet_type === 'fireball') {
-      spell_img.src = "./assets/fireball.png";
+      spell_img.src = "./game/assets/fireball.png";
     } else {
-      spell_img.src = "./assets/frostball.png";
+      spell_img.src = "./game/assets/frostball.png";
     }
     this.move();
     this.bind(stage);
@@ -236,11 +170,11 @@ class Bullet extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default
 
 
 /***/ }),
-/* 4 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moving_object__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moving_object__ = __webpack_require__(0);
 
 
 
@@ -310,13 +244,58 @@ class Enemy extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default 
 
 
 /***/ }),
-/* 5 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bullet__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__status__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__moving_object__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__game__ = __webpack_require__(5);
+
+
+class StartScreen {
+
+  constructor(stage) {
+    this.draw(stage);
+    this.stage = stage;
+    document.addEventListener("keyup", this.startGame());
+  }
+
+  startGame() {
+    const handler = function(e) {
+      if (e.keyCode === 13) {
+        document.removeEventListener("keyup", handler);
+        new __WEBPACK_IMPORTED_MODULE_0__game__["a" /* default */](this.stage);
+      }
+    }.bind(this);
+
+    return handler;
+  }
+
+  draw(stage) {
+    stage.clearRect(0, 0, 1300, 800);
+    stage.font = "100px Arial";
+    stage.fillStyle = '#0e1282';
+    stage.fillRect(0, 0, 1300, 800);
+    stage.fillStyle = 'black';
+    stage.textAlign="center";
+    stage.fillText("Nexus", 650, 300);
+    stage.font = "50px Arial";
+    stage.fillText("Press Enter to Play", 650, 500);
+    stage.textAlign="start";
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (StartScreen);
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bullet__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__status__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__moving_object__ = __webpack_require__(0);
 
 
 
@@ -346,6 +325,7 @@ class Boss extends __WEBPACK_IMPORTED_MODULE_2__moving_object__["a" /* default *
     return (!((this.x_pos > other_obj.x_offset || this.x_offset < other_obj.x_pos) ||
       (this.y_pos > other_obj.y_offset || this.y_offset < other_obj.y_pos)));
   }
+
   setStatus() {
     this.health = 100;
     this.energy = 100;
@@ -415,7 +395,7 @@ class Boss extends __WEBPACK_IMPORTED_MODULE_2__moving_object__["a" /* default *
     this.get_dir();
     this.castSpells(stage);
     this.status.draw(stage, this.health, this.energy);
-    boss_img.src = "./assets/dragon_spritesheet.png";
+    boss_img.src = "./game/assets/dragon_spritesheet.png";
     if (this.dir === 'east') {
       stage.drawImage(boss_img, 0, 0, 102, 134, this.x_pos, this.y_pos, 102, 134);
     }
@@ -483,13 +463,13 @@ class Boss extends __WEBPACK_IMPORTED_MODULE_2__moving_object__["a" /* default *
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boss__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__warrior__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__wizard__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boss__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__warrior__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__wizard__ = __webpack_require__(8);
 
 
 
@@ -629,7 +609,7 @@ class Game {
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -662,11 +642,11 @@ class Status {
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enemies__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enemies__ = __webpack_require__(2);
 
 
 const WARRIOR_SPEED = 4;
@@ -696,7 +676,7 @@ class Warrior extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] 
 
   draw(stage) {
     let warrior_img = new Image();
-    warrior_img.src = "./assets/warrior.png";
+    warrior_img.src = "./game/assets/warrior.png";
     // window.warrior = warrior_img;
     this.move();
     this.bind(stage);
@@ -718,12 +698,12 @@ class Warrior extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] 
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enemies__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bullet__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enemies__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bullet__ = __webpack_require__(1);
 
 
 
@@ -754,7 +734,7 @@ class Wizard extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] {
   draw(stage) {
     this.bind(stage);
     let mage_img = new Image();
-    mage_img.src = "./assets/wizard.png";
+    mage_img.src = "./game/assets/wizard.png";
     let triangle_x = this.boss_pos[0] - this.center[0];
     let triangle_y = this.boss_pos[1] - this.center[1];
     let tan_angle = Math.atan2(triangle_y, triangle_x);
@@ -778,6 +758,27 @@ class Wizard extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] {
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Wizard);
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_start_screen__ = __webpack_require__(3);
+
+
+const GAME_WIDTH = 1300;
+const GAME_HEIGHT = 800;
+
+document.addEventListener("DOMContentLoaded", function() {
+  var canvas = document.getElementById("gameScreen");
+  canvas.width = GAME_WIDTH;
+  canvas.height = GAME_HEIGHT;
+  const stage = canvas.getContext('2d');
+  new __WEBPACK_IMPORTED_MODULE_0__lib_start_screen__["a" /* default */](stage);
+});
 
 
 /***/ })

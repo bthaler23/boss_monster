@@ -27,7 +27,7 @@ class Warrior extends Enemy {
 
   draw(stage) {
     let warrior_img = new Image();
-    warrior_img.src = "./assets/warrior.png";
+    warrior_img.src = "./game/assets/warrior.png";
     // window.warrior = warrior_img;
     this.move();
     this.bind(stage);

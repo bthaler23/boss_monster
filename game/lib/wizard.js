@@ -28,7 +28,7 @@ class Wizard extends Enemy {
   draw(stage) {
     this.bind(stage);
     let mage_img = new Image();
-    mage_img.src = "./assets/wizard.png";
+    mage_img.src = "./game/assets/wizard.png";
     let triangle_x = this.boss_pos[0] - this.center[0];
     let triangle_y = this.boss_pos[1] - this.center[1];
     let tan_angle = Math.atan2(triangle_y, triangle_x);

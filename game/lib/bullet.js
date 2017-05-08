@@ -45,9 +45,9 @@ class Bullet extends MovingObject {
   draw(stage) {
     let spell_img = new Image();
     if (this.bullet_type === 'fireball') {
-      spell_img.src = "./assets/fireball.png";
+      spell_img.src = "./game/assets/fireball.png";
     } else {
-      spell_img.src = "./assets/frostball.png";
+      spell_img.src = "./game/assets/frostball.png";
     }
     this.move();
     this.bind(stage);

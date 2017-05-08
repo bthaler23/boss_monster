@@ -27,6 +27,7 @@ class Boss extends MovingObject {
     return (!((this.x_pos > other_obj.x_offset || this.x_offset < other_obj.x_pos) ||
       (this.y_pos > other_obj.y_offset || this.y_offset < other_obj.y_pos)));
   }
+
   setStatus() {
     this.health = 100;
     this.energy = 100;
@@ -96,7 +97,7 @@ class Boss extends MovingObject {
     this.get_dir();
     this.castSpells(stage);
     this.status.draw(stage, this.health, this.energy);
-    boss_img.src = "./assets/dragon_spritesheet.png";
+    boss_img.src = "./game/assets/dragon_spritesheet.png";
     if (this.dir === 'east') {
       stage.drawImage(boss_img, 0, 0, 102, 134, this.x_pos, this.y_pos, 102, 134);
     }
