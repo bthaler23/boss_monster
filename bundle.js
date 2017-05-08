@@ -508,23 +508,25 @@ class Game {
     window.enemies = this.enemies;
     this.enemies.forEach((enemy) => {
       if (enemy.alive) {
-        if (enemy.collideWith(this.boss)) {
-            this.slain_enemies.push(enemy);
-            enemy.alive = false;
-            this.boss.health -= 10;
+        if (enemy.collideWith(this.boss) && enemy.shielded === false) {
+            this.boss.health -= 0.5;
         } else {
           let hit_spells = [];
           //LOOK AT THIS SHIT FIGURE IT OUT
           this.boss.spells.forEach((spell, i) => {
             if (enemy.collideWith(spell)) {
-              spell.hit = true;
-              this.slain_enemies.push(enemy);
-              enemy.alive = false;
+              if (enemy.shielded === false) {
+                spell.hit = true;
+                this.slain_enemies.push(enemy);
+                enemy.alive = false;
+              } else {
+                spell.hit = true;
               }
+            }
             if (spell.hit) {
               hit_spells.push(i);
             }
-          });
+        });
           hit_spells.forEach((spell_number) => {
             this.boss.spells.splice(spell_number, 1);
           });
@@ -677,7 +679,20 @@ class Warrior extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] 
   }
 
   distance_to_boss() {
-    return Math.sqrt(Math.pow((this.center[0] - this.boss_pos[0]), 2) + Math.pow((this.center[1] - this.center[1]), 2));
+    return Math.sqrt(Math.pow((this.center[0] - this.boss_pos[0]), 2) + Math.pow((this.center[1] - this.boss_pos[1]), 2));
+  }
+
+  halting(stage) {
+    this.shielded = true;
+    var gradient = stage.createRadialGradient(this.center[0], this.center[1], 50, this.center[0], this.center[1], 75);
+    gradient.addColorStop(0, '#fcffd1');
+    gradient.addColorStop(0.8, '#f7ff72');
+    gradient.addColorStop(1, '#f1fc25');
+    this.set_velocity();
+    this.update_offset();
+    stage.arc(this.center[0], this.center[1], 75, 0, 2*Math.PI);
+    stage.fillStyle = gradient;
+    stage.fill();
   }
 
   draw(stage) {
@@ -686,10 +701,10 @@ class Warrior extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] 
     // window.warrior = warrior_img;
     // console.log(this.distance_to_boss());
     if (this.distance_to_boss() < 375) {
+      this.shielded = false;
       this.move();
     } else {
-      this.set_velocity();
-      this.update_offset();
+      this.halting(stage);
     }
     this.bind(stage);
     stage.save();
@@ -697,6 +712,7 @@ class Warrior extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] 
     stage.rotate(this.tan_angle);
     stage.translate(-(this.center[0]), -this.center[1]);
     // stage.fillStyle='black';
+    stage.beginPath();
     // stage.fillRect(this.x_pos, this.y_pos, this.width, this.height);
     // stage.translate(stage.canvas.width/2, stage.canvas.height/2);
     // stage.rotate(Math.PI/4);
@@ -727,6 +743,7 @@ class Wizard extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] {
     this.width = 145;
     this.update_boss_pos(boss_center);
     this.spells = [];
+    this.shielded = false;
     this.update_offset();
     setTimeout(() => {
       this.castSpells();

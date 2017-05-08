@@ -9,6 +9,7 @@ class Wizard extends Enemy {
     this.width = 145;
     this.update_boss_pos(boss_center);
     this.spells = [];
+    this.shielded = false;
     this.update_offset();
     setTimeout(() => {
       this.castSpells();

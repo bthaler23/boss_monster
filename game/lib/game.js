@@ -34,23 +34,25 @@ class Game {
     window.enemies = this.enemies;
     this.enemies.forEach((enemy) => {
       if (enemy.alive) {
-        if (enemy.collideWith(this.boss)) {
-            this.slain_enemies.push(enemy);
-            enemy.alive = false;
-            this.boss.health -= 10;
+        if (enemy.collideWith(this.boss) && enemy.shielded === false) {
+            this.boss.health -= 0.5;
         } else {
           let hit_spells = [];
           //LOOK AT THIS SHIT FIGURE IT OUT
           this.boss.spells.forEach((spell, i) => {
             if (enemy.collideWith(spell)) {
-              spell.hit = true;
-              this.slain_enemies.push(enemy);
-              enemy.alive = false;
+              if (enemy.shielded === false) {
+                spell.hit = true;
+                this.slain_enemies.push(enemy);
+                enemy.alive = false;
+              } else {
+                spell.hit = true;
               }
+            }
             if (spell.hit) {
               hit_spells.push(i);
             }
-          });
+        });
           hit_spells.forEach((spell_number) => {
             this.boss.spells.splice(spell_number, 1);
           });
