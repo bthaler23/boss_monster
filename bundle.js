@@ -395,6 +395,8 @@ class Boss extends __WEBPACK_IMPORTED_MODULE_2__moving_object__["a" /* default *
     this.get_dir();
     this.castSpells(stage);
     this.status.draw(stage, this.health, this.energy);
+    // stage.fillStyle='black';
+    // stage.fillRect(this.x_pos, this.y_pos, this.width, this.height);
     boss_img.src = "./game/assets/dragon_spritesheet.png";
     if (this.dir === 'east') {
       stage.drawImage(boss_img, 0, 0, 102, 134, this.x_pos, this.y_pos, 102, 134);
@@ -509,7 +511,7 @@ class Game {
         if (enemy.collideWith(this.boss)) {
             this.slain_enemies.push(enemy);
             enemy.alive = false;
-            this.boss.health -= 20;
+            this.boss.health -= 10;
         } else {
           let hit_spells = [];
           //LOOK AT THIS SHIT FIGURE IT OUT
@@ -532,7 +534,7 @@ class Game {
           enemy.spells.forEach((spell, i) => {
             if (this.boss.collideWith(spell)) {
               spell.hit = true;
-              this.boss.health -= 20;
+              this.boss.health -= 5;
               if (spell.hit) {
                 hit_spells.push(i);
               }
@@ -649,13 +651,13 @@ class Status {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enemies__ = __webpack_require__(2);
 
 
-const WARRIOR_SPEED = 4;
+const WARRIOR_SPEED = 6;
 
 class Warrior extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] {
 
   constructor(boss_center) {
     super(boss_center);
-    this.set_velocity(this.boss_pos);
+    this.set_velocity();
     this.height = 120;
     this.width = 120;
 
@@ -674,11 +676,21 @@ class Warrior extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] 
       this.set_velocity();
   }
 
+  distance_to_boss() {
+    return Math.sqrt(Math.pow((this.center[0] - this.boss_pos[0]), 2) + Math.pow((this.center[1] - this.center[1]), 2));
+  }
+
   draw(stage) {
     let warrior_img = new Image();
     warrior_img.src = "./game/assets/warrior.png";
     // window.warrior = warrior_img;
-    this.move();
+    // console.log(this.distance_to_boss());
+    if (this.distance_to_boss() < 375) {
+      this.move();
+    } else {
+      this.set_velocity();
+      this.update_offset();
+    }
     this.bind(stage);
     stage.save();
     stage.translate(this.center[0], this.center[1]);

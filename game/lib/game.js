@@ -37,7 +37,7 @@ class Game {
         if (enemy.collideWith(this.boss)) {
             this.slain_enemies.push(enemy);
             enemy.alive = false;
-            this.boss.health -= 20;
+            this.boss.health -= 10;
         } else {
           let hit_spells = [];
           //LOOK AT THIS SHIT FIGURE IT OUT
@@ -60,7 +60,7 @@ class Game {
           enemy.spells.forEach((spell, i) => {
             if (this.boss.collideWith(spell)) {
               spell.hit = true;
-              this.boss.health -= 20;
+              this.boss.health -= 5;
               if (spell.hit) {
                 hit_spells.push(i);
               }

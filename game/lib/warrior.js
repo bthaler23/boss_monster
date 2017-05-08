@@ -1,12 +1,12 @@
 import Enemy from './enemies';
 
-const WARRIOR_SPEED = 4;
+const WARRIOR_SPEED = 6;
 
 class Warrior extends Enemy {
 
   constructor(boss_center) {
     super(boss_center);
-    this.set_velocity(this.boss_pos);
+    this.set_velocity();
     this.height = 120;
     this.width = 120;
 
@@ -25,11 +25,21 @@ class Warrior extends Enemy {
       this.set_velocity();
   }
 
+  distance_to_boss() {
+    return Math.sqrt(Math.pow((this.center[0] - this.boss_pos[0]), 2) + Math.pow((this.center[1] - this.center[1]), 2));
+  }
+
   draw(stage) {
     let warrior_img = new Image();
     warrior_img.src = "./game/assets/warrior.png";
     // window.warrior = warrior_img;
-    this.move();
+    // console.log(this.distance_to_boss());
+    if (this.distance_to_boss() < 375) {
+      this.move();
+    } else {
+      this.set_velocity();
+      this.update_offset();
+    }
     this.bind(stage);
     stage.save();
     stage.translate(this.center[0], this.center[1]);

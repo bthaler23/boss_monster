@@ -97,6 +97,8 @@ class Boss extends MovingObject {
     this.get_dir();
     this.castSpells(stage);
     this.status.draw(stage, this.health, this.energy);
+    // stage.fillStyle='black';
+    // stage.fillRect(this.x_pos, this.y_pos, this.width, this.height);
     boss_img.src = "./game/assets/dragon_spritesheet.png";
     if (this.dir === 'east') {
       stage.drawImage(boss_img, 0, 0, 102, 134, this.x_pos, this.y_pos, 102, 134);
