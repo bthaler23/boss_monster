@@ -63,11 +63,77 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__game__ = __webpack_require__(6);
+
+
+class StartScreen {
+
+  constructor(stage) {
+    this.draw(stage);
+    this.stage = stage;
+    document.addEventListener("keyup", this.startGame());
+  }
+
+  startGame() {
+    const handler = function(e) {
+      if (e.keyCode === 13) {
+        document.removeEventListener("keyup", handler);
+        new __WEBPACK_IMPORTED_MODULE_0__game__["a" /* default */](this.stage);
+      }
+    }.bind(this);
+
+    return handler;
+  }
+
+  draw(stage) {
+    stage.clearRect(0, 0, 1300, 800);
+    stage.font = "100px Arial";
+    stage.fillStyle = '#0e1282';
+    stage.fillRect(0, 0, 1300, 800);
+    stage.fillStyle = 'black';
+    stage.textAlign="center";
+    stage.fillText("Nexus", 650, 300);
+    stage.font = "50px Arial";
+    stage.fillText("Press Enter to Play", 650, 500);
+    stage.textAlign="start";
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (StartScreen);
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_start_screen__ = __webpack_require__(0);
+
+
+const GAME_WIDTH = 1300;
+const GAME_HEIGHT = 800;
+
+document.addEventListener("DOMContentLoaded", function() {
+  var canvas = document.getElementById("gameScreen");
+  canvas.width = GAME_WIDTH;
+  canvas.height = GAME_HEIGHT;
+  const stage = canvas.getContext('2d');
+  new __WEBPACK_IMPORTED_MODULE_0__lib_start_screen__["a" /* default */](stage);
+});
+
+
+/***/ }),
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -100,11 +166,11 @@ class MovingObject {
 
 
 /***/ }),
-/* 1 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moving_object__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moving_object__ = __webpack_require__(2);
 
 
 const BULLET_SPEED = -6;
@@ -170,11 +236,11 @@ class Bullet extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default
 
 
 /***/ }),
-/* 2 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moving_object__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__moving_object__ = __webpack_require__(2);
 
 
 
@@ -244,159 +310,13 @@ class Enemy extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default 
 
 
 /***/ }),
-/* 3 */
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boss__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__warrior__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__wizard__ = __webpack_require__(7);
-
-
-
-
-class Game {
-
-  constructor(stage) {
-    this.stage = stage;
-    this.enemies = []; 
-    this.slain_enemies = [];
-    this.addBoss();
-    this.addEnemies();
-    this.addKeyEvents();
-    this.start();
-    //Timeout toggle so I can refresh appropriatly
-    this.timeout = false;
-    this.refresh_enemies = this.refresh_enemies.bind(this);
-  }
-
-
-  addBoss() {
-    this.boss = new __WEBPACK_IMPORTED_MODULE_0__boss__["a" /* default */]();
-  }
-
-  addEnemies() {
-    for (let i = 0; i < 2 ; i++) {
-      this.enemies.push(new __WEBPACK_IMPORTED_MODULE_1__warrior__["a" /* default */](this.boss.center));
-      this.enemies.push(new __WEBPACK_IMPORTED_MODULE_2__wizard__["a" /* default */](this.boss.center));
-    }
-
-  }
-
-  detectCollisions() {
-    window.enemies = this.enemies;
-    this.enemies.forEach((enemy) => {
-      if (enemy.alive) {
-        if (enemy.collideWith(this.boss)) {
-            this.slain_enemies.push(enemy);
-            enemy.alive = false;
-            this.boss.health -= 20;
-        } else {
-          let hit_spells = [];
-          //LOOK AT THIS SHIT FIGURE IT OUT
-          this.boss.spells.forEach((spell, i) => {
-            if (enemy.collideWith(spell)) {
-              spell.hit = true;
-              this.slain_enemies.push(enemy);
-              enemy.alive = false;
-              }
-            if (spell.hit) {
-              hit_spells.push(i);
-            }
-          });
-          hit_spells.forEach((spell_number) => {
-            this.boss.spells.splice(spell_number, 1);
-          });
-        }
-        if (enemy.constructor.name === 'Wizard') {
-          let hit_spells = [];
-          enemy.spells.forEach((spell, i) => {
-            if (this.boss.collideWith(spell)) {
-              spell.hit = true;
-              this.boss.health -= 20;
-              if (spell.hit) {
-                hit_spells.push(i);
-              }
-            }
-          });
-          hit_spells.forEach((spell_number) => {
-              enemy.spells.splice(spell_number, 1);
-          });
-        }
-      }
-
-    });
-  }
-
-  addKeyEvents() {
-    document.getElementsByTagName("body")[0].addEventListener("keydown", (e) => {
-      this.boss.keys[e.keyCode] = true;
-    });
-    document.getElementsByTagName("body")[0].addEventListener("keyup", (e) => {
-      this.boss.keys[e.keyCode] = false;
-    });
-    this.stage.canvas.addEventListener('click', (e) => {
-      // debugger
-      this.boss.castSpell(e.offsetX, e.offsetY);
-    });
-  }
-
-  start() {
-     requestAnimationFrame(this.animate.bind(this));
-
-  }
-
-  animate(time) {
-    this.stage.clearRect(0, 0, 1300, 800);
-    this.stage.fillStyle = '#fde5c6';
-    this.stage.fillRect(0, 0, 1300, 800);
-
-    this.enemies.forEach((enemy) => {
-      if (enemy.alive) {
-        enemy.draw(this.stage);
-        enemy.update_boss_pos(this.boss.center);
-      }
-    });
-    if (this.slain_enemies.length === this.enemies.length) {
-      if (this.timeout === false) {
-        this.timeout = true;
-        setTimeout(() => (this.refresh_enemies()), 1500);
-      }
-    }
-
-    this.boss.draw(this.stage);
-
-    this.detectCollisions();
-
-    requestAnimationFrame(this.animate.bind(this));
-  }
-
-  refresh_enemies() {
-    this.timeout = false;
-    // this.boss.health += (this.boss.health%100)/2;
-    this.slain_enemies = [];
-    this.enemies.forEach((enemy) => {
-      // enemy.update_boss_pos(this.boss.center);
-      enemy.reposition(this.boss.center);
-    });
-  }
-
-
-
-
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Game);
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bullet__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__status__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__moving_object__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bullet__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__status__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__moving_object__ = __webpack_require__(2);
 
 
 
@@ -563,7 +483,153 @@ class Boss extends __WEBPACK_IMPORTED_MODULE_2__moving_object__["a" /* default *
 
 
 /***/ }),
-/* 5 */
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boss__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__warrior__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__wizard__ = __webpack_require__(9);
+
+
+
+
+class Game {
+
+  constructor(stage) {
+    this.stage = stage;
+    this.enemies = []; 
+    this.slain_enemies = [];
+    this.addBoss();
+    this.addEnemies();
+    this.addKeyEvents();
+    this.start();
+    //Timeout toggle so I can refresh appropriatly
+    this.timeout = false;
+    this.refresh_enemies = this.refresh_enemies.bind(this);
+  }
+
+
+  addBoss() {
+    this.boss = new __WEBPACK_IMPORTED_MODULE_0__boss__["a" /* default */]();
+  }
+
+  addEnemies() {
+    for (let i = 0; i < 2 ; i++) {
+      this.enemies.push(new __WEBPACK_IMPORTED_MODULE_1__warrior__["a" /* default */](this.boss.center));
+      this.enemies.push(new __WEBPACK_IMPORTED_MODULE_2__wizard__["a" /* default */](this.boss.center));
+    }
+
+  }
+
+  detectCollisions() {
+    window.enemies = this.enemies;
+    this.enemies.forEach((enemy) => {
+      if (enemy.alive) {
+        if (enemy.collideWith(this.boss)) {
+            this.slain_enemies.push(enemy);
+            enemy.alive = false;
+            this.boss.health -= 20;
+        } else {
+          let hit_spells = [];
+          //LOOK AT THIS SHIT FIGURE IT OUT
+          this.boss.spells.forEach((spell, i) => {
+            if (enemy.collideWith(spell)) {
+              spell.hit = true;
+              this.slain_enemies.push(enemy);
+              enemy.alive = false;
+              }
+            if (spell.hit) {
+              hit_spells.push(i);
+            }
+          });
+          hit_spells.forEach((spell_number) => {
+            this.boss.spells.splice(spell_number, 1);
+          });
+        }
+        if (enemy.constructor.name === 'Wizard') {
+          let hit_spells = [];
+          enemy.spells.forEach((spell, i) => {
+            if (this.boss.collideWith(spell)) {
+              spell.hit = true;
+              this.boss.health -= 20;
+              if (spell.hit) {
+                hit_spells.push(i);
+              }
+            }
+          });
+          hit_spells.forEach((spell_number) => {
+              enemy.spells.splice(spell_number, 1);
+          });
+        }
+      }
+
+    });
+  }
+
+  addKeyEvents() {
+    document.getElementsByTagName("body")[0].addEventListener("keydown", (e) => {
+      this.boss.keys[e.keyCode] = true;
+    });
+    document.getElementsByTagName("body")[0].addEventListener("keyup", (e) => {
+      this.boss.keys[e.keyCode] = false;
+    });
+    this.stage.canvas.addEventListener('click', (e) => {
+      // debugger
+      this.boss.castSpell(e.offsetX, e.offsetY);
+    });
+  }
+
+  start() {
+     requestAnimationFrame(this.animate.bind(this));
+
+  }
+
+  animate(time) {
+    this.stage.clearRect(0, 0, 1300, 800);
+    this.stage.fillStyle = '#fde5c6';
+    this.stage.fillRect(0, 0, 1300, 800);
+
+    this.enemies.forEach((enemy) => {
+      if (enemy.alive) {
+        enemy.draw(this.stage);
+        enemy.update_boss_pos(this.boss.center);
+      }
+    });
+    if (this.slain_enemies.length === this.enemies.length) {
+      if (this.timeout === false) {
+        this.timeout = true;
+        setTimeout(() => (this.refresh_enemies()), 1500);
+      }
+    }
+
+    this.boss.draw(this.stage);
+
+    this.detectCollisions();
+
+    requestAnimationFrame(this.animate.bind(this));
+  }
+
+  refresh_enemies() {
+    this.timeout = false;
+    // this.boss.health += (this.boss.health%100)/2;
+    this.slain_enemies = [];
+    this.enemies.forEach((enemy) => {
+      // enemy.update_boss_pos(this.boss.center);
+      enemy.reposition(this.boss.center);
+    });
+  }
+
+
+
+
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Game);
+
+
+/***/ }),
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -596,14 +662,14 @@ class Status {
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enemies__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enemies__ = __webpack_require__(4);
 
 
-const WARRIOR_SPEED = 6;
+const WARRIOR_SPEED = 4;
 
 class Warrior extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] {
 
@@ -652,12 +718,12 @@ class Warrior extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] 
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enemies__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bullet__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enemies__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bullet__ = __webpack_require__(3);
 
 
 
@@ -712,27 +778,6 @@ class Wizard extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] {
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Wizard);
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_game__ = __webpack_require__(3);
-
-
-const GAME_WIDTH = 1300;
-const GAME_HEIGHT = 800;
-
-document.addEventListener("DOMContentLoaded", function() {
-  var canvas = document.getElementById("gameScreen");
-  canvas.width = GAME_WIDTH;
-  canvas.height = GAME_HEIGHT;
-  const stage = canvas.getContext('2d');
-  new __WEBPACK_IMPORTED_MODULE_0__lib_game__["a" /* default */](stage);
-});
 
 
 /***/ })

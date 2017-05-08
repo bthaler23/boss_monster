@@ -1,6 +1,6 @@
 import Enemy from './enemies';
 
-const WARRIOR_SPEED = 6;
+const WARRIOR_SPEED = 4;
 
 class Warrior extends Enemy {
 
