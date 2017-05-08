@@ -74,9 +74,9 @@ class Boss extends MovingObject {
 
   castSpell(x_offSet, y_offSet) {
     // debugger
-    if (this.energy >= 10) {
+    if (this.energy >= 20) {
       this.spells.push(new Bullet(this.center, 'red', x_offSet, y_offSet));
-      this.energy -= 10;
+      this.energy -= 20;
     }
     console.log(this.spells);
     // console.log(this.spells);

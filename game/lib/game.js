@@ -31,32 +31,33 @@ class Game {
   }
 
   detectCollisions() {
-    window.enemies = this.enemies;
+    // window.enemies = this.enemies;
     this.enemies.forEach((enemy) => {
       if (enemy.alive) {
-        if (enemy.collideWith(this.boss) && enemy.shielded === false) {
-            this.boss.health -= 0.5;
-        } else {
-          let hit_spells = [];
-          //LOOK AT THIS SHIT FIGURE IT OUT
-          this.boss.spells.forEach((spell, i) => {
-            if (enemy.collideWith(spell)) {
-              if (enemy.shielded === false) {
-                spell.hit = true;
-                this.slain_enemies.push(enemy);
-                enemy.alive = false;
-              } else {
-                spell.hit = true;
-              }
+        //LOOK AT THIS SHIT FIGURE IT OUT
+        let hit_spells = [];
+        this.boss.spells.forEach((spell, i) => {
+          if (enemy.collideWith(spell)) {
+            if (enemy.shielded === false) {
+              spell.hit = true;
+              this.slain_enemies.push(enemy);
+              enemy.alive = false;
+            } else {
+              spell.hit = true;
             }
             if (spell.hit) {
               hit_spells.push(i);
             }
+          }
         });
-          hit_spells.forEach((spell_number) => {
-            this.boss.spells.splice(spell_number, 1);
-          });
+        hit_spells.forEach((spell_number) => {
+          this.boss.spells.splice(spell_number, 1);
+        });
+        //Check boss collision with enemy
+        if (enemy.collideWith(this.boss)) {
+            this.boss.health -= 0.5;
         }
+      }
         if (enemy.constructor.name === 'Wizard') {
           let hit_spells = [];
           enemy.spells.forEach((spell, i) => {
@@ -72,9 +73,7 @@ class Game {
               enemy.spells.splice(spell_number, 1);
           });
         }
-      }
-
-    });
+      });
   }
 
   addKeyEvents() {
