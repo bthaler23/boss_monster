@@ -47,7 +47,7 @@ class Warrior extends Enemy {
     warrior_img.src = "./game/assets/warrior.png";
     // window.warrior = warrior_img;
     // console.log(this.distance_to_boss());
-    if (this.distance_to_boss() < 375) {
+    if (this.distance_to_boss() < 400) {
       this.shielded = false;
       this.move();
     } else {

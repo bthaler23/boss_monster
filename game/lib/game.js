@@ -55,7 +55,9 @@ class Game {
         });
         //Check boss collision with enemy
         if (enemy.collideWith(this.boss)) {
+          if (enemy.alive) {
             this.boss.health -= 0.5;
+          }
         }
       }
         if (enemy.constructor.name === 'Wizard') {
