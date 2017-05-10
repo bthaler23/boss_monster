@@ -271,15 +271,15 @@ class StartScreen {
   }
 
   draw(stage) {
-    stage.clearRect(0, 0, 1300, 800);
+    stage.clearRect(0, 0, stage.canvas.width, stage.canvas.height);
     stage.font = "100px Arial";
     stage.fillStyle = '#0e1282';
-    stage.fillRect(0, 0, 1300, 800);
+    stage.fillRect(0, 0, stage.canvas.width, stage.canvas.height);
     stage.fillStyle = 'black';
     stage.textAlign="center";
-    stage.fillText("Nexus", 650, 300);
+    stage.fillText("Nexus", stage.canvas.width/2, stage.canvas.height * 2/5);
     stage.font = "50px Arial";
-    stage.fillText("Press Enter to Play", 650, 500);
+    stage.fillText("Press Enter to Play", stage.canvas.width/2, stage.canvas.height * 3/5);
     stage.textAlign="start";
   }
 
@@ -577,9 +577,9 @@ class Game {
   }
 
   animate(time) {
-    this.stage.clearRect(0, 0, 1300, 800);
+    this.stage.clearRect(0, 0, this.stage.canvas.width, this.stage.canvas.height);
     this.stage.fillStyle = '#fde5c6';
-    this.stage.fillRect(0, 0, 1300, 800);
+    this.stage.fillRect(0, 0, this.stage.canvas.width, this.stage.canvas.height);
 
     this.enemies.forEach((enemy) => {
       if (enemy.alive) {
@@ -812,13 +812,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_start_screen__ = __webpack_require__(3);
 
 
-const GAME_WIDTH = 1300;
-const GAME_HEIGHT = 800;
+let game_width = window.innerWidth * 4/5;
+let game_height = window.innerHeight * 3/4;
+
 
 document.addEventListener("DOMContentLoaded", function() {
   var canvas = document.getElementById("gameScreen");
-  canvas.width = GAME_WIDTH;
-  canvas.height = GAME_HEIGHT;
+  canvas.width = game_width;
+  canvas.height = game_height;
   const stage = canvas.getContext('2d');
   new __WEBPACK_IMPORTED_MODULE_0__lib_start_screen__["a" /* default */](stage);
 });

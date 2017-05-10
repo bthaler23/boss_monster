@@ -20,15 +20,15 @@ class StartScreen {
   }
 
   draw(stage) {
-    stage.clearRect(0, 0, 1300, 800);
+    stage.clearRect(0, 0, stage.canvas.width, stage.canvas.height);
     stage.font = "100px Arial";
     stage.fillStyle = '#0e1282';
-    stage.fillRect(0, 0, 1300, 800);
+    stage.fillRect(0, 0, stage.canvas.width, stage.canvas.height);
     stage.fillStyle = 'black';
     stage.textAlign="center";
-    stage.fillText("Nexus", 650, 300);
+    stage.fillText("Nexus", stage.canvas.width/2, stage.canvas.height * 2/5);
     stage.font = "50px Arial";
-    stage.fillText("Press Enter to Play", 650, 500);
+    stage.fillText("Press Enter to Play", stage.canvas.width/2, stage.canvas.height * 3/5);
     stage.textAlign="start";
   }
 

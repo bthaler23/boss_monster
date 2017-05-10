@@ -103,9 +103,9 @@ class Game {
   }
 
   animate(time) {
-    this.stage.clearRect(0, 0, 1300, 800);
+    this.stage.clearRect(0, 0, this.stage.canvas.width, this.stage.canvas.height);
     this.stage.fillStyle = '#fde5c6';
-    this.stage.fillRect(0, 0, 1300, 800);
+    this.stage.fillRect(0, 0, this.stage.canvas.width, this.stage.canvas.height);
 
     this.enemies.forEach((enemy) => {
       if (enemy.alive) {
