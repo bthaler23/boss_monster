@@ -1,7 +1,7 @@
 import Bullet from './bullet';
 import Status from './status';
 import MovingObject from './moving_object';
-const MAX_SPEED = 3;
+const MAX_SPEED = 4;
 
 class Boss extends MovingObject {
 

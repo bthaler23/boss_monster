@@ -299,7 +299,7 @@ class StartScreen {
 
 
 
-const MAX_SPEED = 3;
+const MAX_SPEED = 4;
 
 class Boss extends __WEBPACK_IMPORTED_MODULE_2__moving_object__["a" /* default */] {
 
@@ -497,9 +497,15 @@ class Game {
   }
 
   addEnemies() {
-    for (let i = 0; i < 2 ; i++) {
-      this.enemies.push(new __WEBPACK_IMPORTED_MODULE_1__warrior__["a" /* default */](this.boss.center));
-      this.enemies.push(new __WEBPACK_IMPORTED_MODULE_2__wizard__["a" /* default */](this.boss.center));
+    for (let i = 0; i < 1 ; i++) {
+      let min = Math.ceil(0);
+      let max = Math.floor(1);
+      let enemy_decider = Math.floor(Math.random() * (max - min +1)) + min;
+      if (enemy_decider === 1) {
+        this.enemies.push(new __WEBPACK_IMPORTED_MODULE_1__warrior__["a" /* default */](this.boss.center));
+      } else {
+        this.enemies.push(new __WEBPACK_IMPORTED_MODULE_2__wizard__["a" /* default */](this.boss.center));
+      }
     }
 
   }
@@ -529,7 +535,9 @@ class Game {
         });
         //Check boss collision with enemy
         if (enemy.collideWith(this.boss)) {
+          if (enemy.alive) {
             this.boss.health -= 0.5;
+          }
         }
       }
         if (enemy.constructor.name === 'Wizard') {
@@ -594,6 +602,7 @@ class Game {
   }
 
   refresh_enemies() {
+    this.addEnemies();
     this.timeout = false;
     // this.boss.health += (this.boss.health%100)/2;
     this.slain_enemies = [];
@@ -624,14 +633,20 @@ class Status {
   }
 
   draw(stage, health, energy) {
+    stage.shadowBlur = 3;
+    stage.shadowColor = 'rgba(0, 0, 0, 0.5)';
+    stage.shadowOffsetY = 2;
+    stage.shadowOffsetX = 2;
     stage.fillStyle = 'red';
     stage.font = '30px Arial';
+    stage.strokeText("Health", 10, 40);
     stage.fillText("Health", 10, 40);
     stage.fillStyle = 'black';
     stage.fillRect(9, 49, 302, 22);
     stage.fillStyle = 'red';
     stage.fillRect(10, 50, 3 * health, 20);
     stage.fillStyle = 'green';
+    stage.strokeText("Energy", 10, 100);
     stage.fillText("Energy", 10, 100);
     stage.fillStyle = 'black';
     stage.fillRect(9, 109, 302, 22);
@@ -699,7 +714,7 @@ class Warrior extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] 
     warrior_img.src = "./game/assets/warrior.png";
     // window.warrior = warrior_img;
     // console.log(this.distance_to_boss());
-    if (this.distance_to_boss() < 375) {
+    if (this.distance_to_boss() < 400) {
       this.shielded = false;
       this.move();
     } else {

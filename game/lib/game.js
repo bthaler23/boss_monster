@@ -23,9 +23,15 @@ class Game {
   }
 
   addEnemies() {
-    for (let i = 0; i < 2 ; i++) {
-      this.enemies.push(new Warrior(this.boss.center));
-      this.enemies.push(new Wizard(this.boss.center));
+    for (let i = 0; i < 1 ; i++) {
+      let min = Math.ceil(0);
+      let max = Math.floor(1);
+      let enemy_decider = Math.floor(Math.random() * (max - min +1)) + min;
+      if (enemy_decider === 1) {
+        this.enemies.push(new Warrior(this.boss.center));
+      } else {
+        this.enemies.push(new Wizard(this.boss.center));
+      }
     }
 
   }
@@ -122,6 +128,7 @@ class Game {
   }
 
   refresh_enemies() {
+    this.addEnemies();
     this.timeout = false;
     // this.boss.health += (this.boss.health%100)/2;
     this.slain_enemies = [];
