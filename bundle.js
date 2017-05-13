@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -248,7 +248,7 @@ class Enemy extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default 
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__game__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__game__ = __webpack_require__(6);
 
 
 class StartScreen {
@@ -277,7 +277,7 @@ class StartScreen {
     stage.fillRect(0, 0, stage.canvas.width, stage.canvas.height);
     stage.fillStyle = 'black';
     stage.textAlign="center";
-    stage.fillText("Nexus", stage.canvas.width/2, stage.canvas.height * 2/5);
+    stage.fillText("Boss Monster", stage.canvas.width/2, stage.canvas.height * 2/5);
     stage.font = "50px Arial";
     stage.fillText("Press Enter to Play", stage.canvas.width/2, stage.canvas.height * 3/5);
     stage.textAlign="start";
@@ -293,8 +293,30 @@ class StartScreen {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_start_screen__ = __webpack_require__(3);
+
+
+let game_width = window.innerWidth * 4/5;
+let game_height = window.innerHeight * 3/4;
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var canvas = document.getElementById("gameScreen");
+  canvas.width = game_width;
+  canvas.height = game_height;
+  const stage = canvas.getContext('2d');
+  new __WEBPACK_IMPORTED_MODULE_0__lib_start_screen__["a" /* default */](stage);
+});
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bullet__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__status__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__status__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__moving_object__ = __webpack_require__(0);
 
 
@@ -465,13 +487,13 @@ class Boss extends __WEBPACK_IMPORTED_MODULE_2__moving_object__["a" /* default *
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boss__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__warrior__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__wizard__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boss__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__warrior__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__wizard__ = __webpack_require__(9);
 
 
 
@@ -621,7 +643,7 @@ class Game {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -660,7 +682,7 @@ class Status {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -740,7 +762,7 @@ class Warrior extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] 
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -801,28 +823,6 @@ class Wizard extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] {
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Wizard);
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_start_screen__ = __webpack_require__(3);
-
-
-let game_width = window.innerWidth * 4/5;
-let game_height = window.innerHeight * 3/4;
-
-
-document.addEventListener("DOMContentLoaded", function() {
-  var canvas = document.getElementById("gameScreen");
-  canvas.width = game_width;
-  canvas.height = game_height;
-  const stage = canvas.getContext('2d');
-  new __WEBPACK_IMPORTED_MODULE_0__lib_start_screen__["a" /* default */](stage);
-});
 
 
 /***/ })

@@ -1,7 +1,7 @@
 var path = require('path');
 
 module.exports = {
-  entry: './game/nexus.js',
+  entry: './game/boss_monster.js',
   output: {
     filename: './bundle.js',
   },
