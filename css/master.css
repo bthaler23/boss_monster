@@ -1,15 +1,37 @@
 body {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: url('../game/assets/tiled.png');
+  background-image: url('../game/assets/tiled.jpg');
   background-position: top:
   background-repeat: no-repeat;
   background-size: cover;
 }
 
+.links {
+  display: flex;
+  width: 20%;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-top: 30px;
+}
+
+.links a {
+  text-decoration: none;
+  font-family: 'Inknut Antiqua', serif;
+  background-color: #4a433b;
+  color: black;
+  box-shadow: 10px 10px 3px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 5px 10px;
+}
+
+.links a:hover {
+  color: #b30000;
+}
+
 canvas {
-  min-width: 700px;
-  min-height: 400px;
-  border-radius: 5px;
+  box-shadow: 10px 10px 3px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
 }

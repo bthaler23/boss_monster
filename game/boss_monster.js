@@ -1,7 +1,7 @@
 import StartScreen from './lib/start_screen';
 
-let game_width = window.innerWidth * 4/5;
-let game_height = window.innerHeight * 3/4;
+let game_width = Math.floor(window.innerWidth * 4/5);
+let game_height = Math.floor(window.innerHeight * 3/4);
 
 
 document.addEventListener("DOMContentLoaded", function() {
