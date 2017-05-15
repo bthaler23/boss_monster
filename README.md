@@ -33,11 +33,11 @@ Other scripts included in this project:
 
 The Arena is where the actual gameplay will take place. The player-character is a boss sprite that can move around and can shoot bullets on an set interval to attack enemy characters. There will be two types of enemies, ones that stay afar and shoot bullets, and ones that rush in for an attack, and they will be in distinct colors so players will be able to tell the difference.
 
-![Arena](/wireframes/arena.png)
+![Arena](/docs/wireframes/arena.png)
 
 [View Other Wireframes Here][wireframes]
 
-[wireframes]: ./wireframes
+[wireframes]: ./docs/wireframes
 
 ## Implementation Timeline
 
