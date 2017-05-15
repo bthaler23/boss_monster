@@ -28,6 +28,10 @@ class Boss extends MovingObject {
       (this.y_pos > other_obj.y_offset || this.y_offset < other_obj.y_pos)));
   }
 
+  regenHealth() {
+    this.health += (100 - this.health)/2;
+  }
+
   setStatus() {
     this.health = 100;
     this.energy = 100;
@@ -78,7 +82,6 @@ class Boss extends MovingObject {
       this.spells.push(new Bullet(this.center, 'red', x_offSet, y_offSet));
       this.energy -= 20;
     }
-    console.log(this.spells);
     // console.log(this.spells);
   }
 

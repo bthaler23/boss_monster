@@ -3,22 +3,22 @@ import MovingObject from './moving_object';
 
 class Enemy extends MovingObject {
 
-  constructor(boss_pos) {
+  constructor(boss_pos, stage) {
     super();
     this.update_boss_pos(boss_pos);
-    this.generate_pos();
+    this.generate_pos(stage);
     this.height = 200;
     this.width = 200;
     this.alive = true;
     this.update_offset();
   }
 
-  generate_pos() {
+  generate_pos(stage) {
     let x_generator = Math.floor(Math.random() * 2);
     if (x_generator === 1) {
-      this.x_pos = Math.floor(Math.random() * 1700 - 1500) + 1500;
+      this.x_pos = Math.floor(Math.random() * stage.canvas.width + 150 - stage.canvas.width - 150) + stage.canvas.width - 150;
     } else {
-      this.x_pos = Math.floor(Math.random() * 150);
+      this.x_pos = Math.floor(Math.random() * 200);
     }
     let y_generator = Math.floor(Math.random() * 2);
     if (y_generator == 1) {
@@ -30,18 +30,18 @@ class Enemy extends MovingObject {
 
   bind(stage) {
     if (this.x_pos >= stage.canvas.width + 30) {
-      this.reposition(this.boss_pos);
+      this.reposition(this.boss_pos, stage);
     }
     if (this.x_pos <= -30) {
-      this.reposition(this.boss_pos);
+      this.reposition(this.boss_pos, stage);
     }
     if (this.y_pos >= stage.canvas.height + 30) {
       // this.alive = false;
-      this.reposition(this.boss_pos);
+      this.reposition(this.boss_pos, stage);
     }
     if (this.y_pos <= -30) {
       // this.alive = false;
-      this.reposition(this.boss_pos);
+      this.reposition(this.boss_pos, stage);
     }
   }
 
@@ -54,9 +54,9 @@ class Enemy extends MovingObject {
     this.boss_pos = boss_pos;
   }
 
-  reposition(boss_pos) {
+  reposition(boss_pos, stage) {
     this.alive = true;
-    this.generate_pos();
+    this.generate_pos(stage);
     this.update_offset();
     this.update_class_attributes(boss_pos);
   }

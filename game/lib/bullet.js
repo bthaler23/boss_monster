@@ -1,6 +1,7 @@
 import MovingObject from './moving_object';
 
-const BULLET_SPEED = -6;
+const FIREBALL_SPEED = -6;
+const FROSTBALL_SPEED = -10;
 
 class Bullet extends MovingObject {
 
@@ -38,8 +39,8 @@ class Bullet extends MovingObject {
 
   set_velocity(offset_x, offset_y) {
     let tan_angle = Math.atan2(offset_x, offset_y);
-    this.x_vel = Math.sin(tan_angle) * BULLET_SPEED;
-    this.y_vel = Math.cos(tan_angle) * BULLET_SPEED;
+    this.x_vel = (this.bullet_type === 'fireball') ? Math.sin(tan_angle) * FIREBALL_SPEED : Math.sin(tan_angle) * FROSTBALL_SPEED;
+    this.y_vel = (this.bullet_type === 'fireball') ? Math.cos(tan_angle) * FIREBALL_SPEED : Math.cos(tan_angle) * FROSTBALL_SPEED;
   }
 
   draw(stage) {

@@ -4,8 +4,8 @@ const WARRIOR_SPEED = 6;
 
 class Warrior extends Enemy {
 
-  constructor(boss_center) {
-    super(boss_center);
+  constructor(boss_center, stage) {
+    super(boss_center, stage);
     this.set_velocity();
     this.height = 120;
     this.width = 120;

@@ -3,8 +3,8 @@ import Bullet from './bullet';
 
 class Wizard extends Enemy {
 
-  constructor(boss_center) {
-    super(boss_center);
+  constructor(boss_center, stage) {
+    super(boss_center, stage);
     this.height = 130;
     this.width = 145;
     this.update_boss_pos(boss_center);

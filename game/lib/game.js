@@ -30,9 +30,9 @@ class Game {
       let max = Math.floor(1);
       let enemy_decider = Math.floor(Math.random() * (max - min +1)) + min;
       if (enemy_decider === 1) {
-        this.enemies.push(new Warrior(this.boss.center));
+        this.enemies.push(new Warrior(this.boss.center, this.stage));
       } else {
-        this.enemies.push(new Wizard(this.boss.center));
+        this.enemies.push(new Wizard(this.boss.center, this.stage));
       }
     }
 
@@ -140,8 +140,9 @@ class Game {
     this.slain_enemies = [];
     this.enemies.forEach((enemy) => {
       // enemy.update_boss_pos(this.boss.center);
-      enemy.reposition(this.boss.center);
+      enemy.reposition(this.boss.center, this.stage);
     });
+    this.boss.regenHealth();
     this.level += 1;
   }
 
