@@ -206,17 +206,17 @@ class Enemy extends __WEBPACK_IMPORTED_MODULE_0__moving_object__["a" /* default 
   }
 
   bind(stage) {
-    if (this.x_pos >= stage.canvas.width) {
+    if (this.x_pos >= stage.canvas.width + 30) {
       this.reposition(this.boss_pos);
     }
-    if (this.x_pos <= 0) {
+    if (this.x_pos <= -30) {
       this.reposition(this.boss_pos);
     }
-    if (this.y_pos >= stage.canvas.height) {
+    if (this.y_pos >= stage.canvas.height + 30) {
       // this.alive = false;
       this.reposition(this.boss_pos);
     }
-    if (this.y_pos <= 0) {
+    if (this.y_pos <= -30) {
       // this.alive = false;
       this.reposition(this.boss_pos);
     }
@@ -501,6 +501,8 @@ class Boss extends __WEBPACK_IMPORTED_MODULE_2__moving_object__["a" /* default *
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boss__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__warrior__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__wizard__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_over__ = __webpack_require__(10);
+
 
 
 
@@ -511,6 +513,7 @@ class Game {
     this.stage = stage;
     this.enemies = []; 
     this.slain_enemies = [];
+    this.level = 1;
     this.addBoss();
     this.addEnemies();
     this.addKeyEvents();
@@ -624,10 +627,14 @@ class Game {
     }
 
     this.boss.draw(this.stage);
-
+    this.stage.fillStyle = 'black';
+    this.stage.fillText(`Level: ${this.level}`, this.stage.canvas.width * 17/20, this.stage.canvas.height * 1/10);
     this.detectCollisions();
-
-    requestAnimationFrame(this.animate.bind(this));
+    if (this.boss.health <= 0) {
+      new __WEBPACK_IMPORTED_MODULE_3__game_over__["a" /* default */](this.stage);
+    } else {
+      requestAnimationFrame(this.animate.bind(this));
+    }
   }
 
   refresh_enemies() {
@@ -639,6 +646,7 @@ class Game {
       // enemy.update_boss_pos(this.boss.center);
       enemy.reposition(this.boss.center);
     });
+    this.level += 1;
   }
 
 
@@ -667,20 +675,20 @@ class Status {
     stage.shadowOffsetY = 2;
     stage.shadowOffsetX = 2;
     stage.fillStyle = 'red';
-    stage.font = '30px Arial';
-    stage.strokeText("Health", 10, 40);
-    stage.fillText("Health", 10, 40);
+    stage.font = '40px Arial';
+    stage.fillText("Health", 20, 50);
+    stage.strokeText("Health", 20, 50);
     stage.fillStyle = 'black';
-    stage.fillRect(9, 49, 302, 22);
+    stage.fillRect(19, 59, 302, 22);
     stage.fillStyle = 'red';
-    stage.fillRect(10, 50, 3 * health, 20);
+    stage.fillRect(20, 60, 3 * health, 20);
     stage.fillStyle = 'green';
-    stage.strokeText("Energy", 10, 100);
-    stage.fillText("Energy", 10, 100);
+    stage.fillText("Energy", 20, 120);
+    stage.strokeText("Energy", 20, 120);
     stage.fillStyle = 'black';
-    stage.fillRect(9, 109, 302, 22);
+    stage.fillRect(19, 129, 302, 22);
     stage.fillStyle = 'green';
-    stage.fillRect(10, 110, 3 * energy, 20);
+    stage.fillRect(20, 130, 3 * energy, 20);
   }
 
 }
@@ -830,6 +838,62 @@ class Wizard extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] {
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Wizard);
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__game__ = __webpack_require__(6);
+
+
+class StartScreen {
+
+  constructor(stage) {
+    this.draw(stage);
+    this.stage = stage;
+    document.addEventListener("keyup", this.startGame());
+  }
+
+  startGame() {
+    const handler = function(e) {
+      if (e.keyCode === 13) {
+        document.removeEventListener("keyup", handler);
+        new __WEBPACK_IMPORTED_MODULE_0__game__["a" /* default */](this.stage);
+      }
+    }.bind(this);
+
+    return handler;
+  }
+
+  draw(stage) {
+    stage.clearRect(0, 0, stage.canvas.width, stage.canvas.height);
+
+    stage.fillStyle = '#4a433b';
+    stage.fillRect(0, 0, stage.canvas.width, stage.canvas.height);
+    stage.fillStyle = '#b30000';
+    stage.textAlign="center";
+    stage.strokeStyle = 'black';
+    stage.font = "60px Inknut Antiqua serif";
+    stage.fillText("You Died!", stage.canvas.width/2, stage.canvas.height * 1/5);
+    stage.strokeText("You Died!", stage.canvas.width/2, stage.canvas.height * 1/5);
+    stage.font = "100px Inknut Antiqua serif";
+    stage.fillText("Boss Monster", stage.canvas.width/2, stage.canvas.height * 2/5);
+    stage.strokeText("Boss Monster", stage.canvas.width/2, stage.canvas.height * 2/5);
+    stage.font = "50px Inknut Antiqua serif";
+    stage.fillText("Press Enter to Play", stage.canvas.width/2, stage.canvas.height * 3/5);
+    stage.strokeText("Press Enter to Play", stage.canvas.width/2, stage.canvas.height * 3/5);
+    stage.fillStyle = "black";
+    stage.font = "25px Inknut Antiqua serif";
+    stage.fillText("WASD to Move, Click To Shoot", stage.canvas.width/2, stage.canvas.height * 7/10);
+    stage.fillText("Developed by Brandon Thaler", stage.canvas.width/2, stage.canvas.height * 4/5);
+    stage.textAlign="start";
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (StartScreen);
 
 
 /***/ })

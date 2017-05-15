@@ -29,17 +29,17 @@ class Enemy extends MovingObject {
   }
 
   bind(stage) {
-    if (this.x_pos >= stage.canvas.width) {
+    if (this.x_pos >= stage.canvas.width + 30) {
       this.reposition(this.boss_pos);
     }
-    if (this.x_pos <= 0) {
+    if (this.x_pos <= -30) {
       this.reposition(this.boss_pos);
     }
-    if (this.y_pos >= stage.canvas.height) {
+    if (this.y_pos >= stage.canvas.height + 30) {
       // this.alive = false;
       this.reposition(this.boss_pos);
     }
-    if (this.y_pos <= 0) {
+    if (this.y_pos <= -30) {
       // this.alive = false;
       this.reposition(this.boss_pos);
     }

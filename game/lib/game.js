@@ -1,6 +1,7 @@
 import Boss from './boss';
 import Warrior from './warrior';
 import Wizard from './wizard';
+import GameOver from './game_over';
 
 class Game {
 
@@ -8,6 +9,7 @@ class Game {
     this.stage = stage;
     this.enemies = []; 
     this.slain_enemies = [];
+    this.level = 1;
     this.addBoss();
     this.addEnemies();
     this.addKeyEvents();
@@ -121,10 +123,14 @@ class Game {
     }
 
     this.boss.draw(this.stage);
-
+    this.stage.fillStyle = 'black';
+    this.stage.fillText(`Level: ${this.level}`, this.stage.canvas.width * 17/20, this.stage.canvas.height * 1/10);
     this.detectCollisions();
-
-    requestAnimationFrame(this.animate.bind(this));
+    if (this.boss.health <= 0) {
+      new GameOver(this.stage);
+    } else {
+      requestAnimationFrame(this.animate.bind(this));
+    }
   }
 
   refresh_enemies() {
@@ -136,6 +142,7 @@ class Game {
       // enemy.update_boss_pos(this.boss.center);
       enemy.reposition(this.boss.center);
     });
+    this.level += 1;
   }
 
 
