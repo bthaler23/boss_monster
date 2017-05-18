@@ -1,6 +1,6 @@
 body {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   background-image: url('../game/assets/tiled.jpg');
@@ -9,29 +9,69 @@ body {
   background-size: cover;
 }
 
-.links {
+main {
   display: flex;
-  width: 20%;
   flex-direction: row;
-  justify-content: space-between;
-  padding-top: 30px;
-}
-
-.links a {
-  text-decoration: none;
-  font-family: 'Inknut Antiqua', serif;
-  background-color: #4a433b;
-  color: black;
-  box-shadow: 10px 10px 3px 5px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  padding: 5px 10px;
-}
-
-.links a:hover {
-  color: #b30000;
+  align-items: center;
 }
 
 canvas {
   box-shadow: 10px 10px 3px 5px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
+}
+
+.torch {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 20px;
+  width: 120px;
+  height: 120px;
+}
+
+.torch .flame{
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: gold;
+  opacity: .2;
+  animation: light .3s linear alternate infinite;
+}
+
+.torch .flame2 {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: red;
+  opacity: .3;
+  animation: light .3s linear alternate infinite;
+}
+
+@keyframes light {
+  0 {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+.torch a {
+  position: absolute;
+  text-decoration: none;
+  font-family: 'Inknut Antiqua', serif;
+  background-color: #b30000;
+  color: black;
+  /*box-shadow: 10px 10px 3px 5px rgba(0, 0, 0, 0.2);*/
+  border-radius: 10px;
+  padding: 5px 10px;
+
+}
+
+
+.torch a:hover {
+  color: orange ;
 }
