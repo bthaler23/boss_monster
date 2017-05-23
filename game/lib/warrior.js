@@ -20,14 +20,16 @@ class Warrior extends Enemy {
     this.y_vel = Math.sin(this.tan_angle) * WARRIOR_SPEED;
   }
 
+  distance_to_boss() {
+    return Math.sqrt(Math.pow((this.center[0] - this.boss_pos[0]), 2) + Math.pow((this.center[1] - this.boss_pos[1]), 2));
+  }
+
+  
   update_class_attributes(boss_pos) {
       this.update_boss_pos(boss_pos);
       this.set_velocity();
   }
 
-  distance_to_boss() {
-    return Math.sqrt(Math.pow((this.center[0] - this.boss_pos[0]), 2) + Math.pow((this.center[1] - this.boss_pos[1]), 2));
-  }
 
   halting(stage) {
     this.shielded = true;

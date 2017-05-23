@@ -2,8 +2,7 @@
 
 class MovingObject {
 
-  constructor() {    
-  }
+  constructor() {}
 
   move() {
     this.x_pos += this.x_vel;
