@@ -12,7 +12,7 @@ Boss Monster is developed with a JavaScript engine, and utilizes HTML Canvas to 
 
 ### Gameplay
 
-![Gameplay](/docs/images/boss_monster.mp4)
+![Gameplay](/docs/images/boss_monster.gif)
 
 
 ### Major Features
