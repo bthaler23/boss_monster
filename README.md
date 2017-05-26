@@ -2,7 +2,7 @@
 
 Link to [Boss Monster][bossMonster]
 
-[bossMonster]: www.bthaler.me/boss-Monster
+[bossMonster]: http://www.bthaler.me/boss-Monster
 
 Boss Monster is an action game, where user's take control of a boss in a dungeon and attempt to defeat waves of enemies in order to get the highest score. In terms of video game genres, Boss Monster would fall under a Top-Down Shooter, where players have control over the main character who can move and shoot bullets at the enemies, who are capable of fighting back as well.
 
@@ -12,7 +12,7 @@ Boss Monster is developed with a JavaScript engine, and utilizes HTML Canvas to 
 
 ### Gameplay
 
-![Gameplay](/docs/images/boss_monster.gif)
+![Gameplay](/docs/images/boss_monster.mp4)
 
 
 ### Major Features
