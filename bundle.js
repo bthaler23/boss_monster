@@ -75,8 +75,7 @@
 
 class MovingObject {
 
-  constructor() {    
-  }
+  constructor() {}
 
   move() {
     this.x_pos += this.x_vel;
@@ -472,8 +471,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_start_screen__ = __webpack_require__(4);
 
 
-let game_width = Math.floor(window.innerWidth * 4/5);
-let game_height = Math.floor(window.innerHeight * 3/4);
+let game_width = Math.floor(1200);
+let game_height = Math.floor(750);
 
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -787,14 +786,16 @@ class Warrior extends __WEBPACK_IMPORTED_MODULE_0__enemies__["a" /* default */] 
     this.y_vel = Math.sin(this.tan_angle) * WARRIOR_SPEED;
   }
 
+  distance_to_boss() {
+    return Math.sqrt(Math.pow((this.center[0] - this.boss_pos[0]), 2) + Math.pow((this.center[1] - this.boss_pos[1]), 2));
+  }
+
+  
   update_class_attributes(boss_pos) {
       this.update_boss_pos(boss_pos);
       this.set_velocity();
   }
 
-  distance_to_boss() {
-    return Math.sqrt(Math.pow((this.center[0] - this.boss_pos[0]), 2) + Math.pow((this.center[1] - this.boss_pos[1]), 2));
-  }
 
   halting(stage) {
     this.shielded = true;
