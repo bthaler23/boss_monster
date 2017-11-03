@@ -472,7 +472,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 let game_width = Math.floor(1000);
-let game_height = Math.floor(600);
+let game_height = Math.floor(700);
 
 
 document.addEventListener("DOMContentLoaded", function() {
