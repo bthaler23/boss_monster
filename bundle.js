@@ -471,8 +471,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_start_screen__ = __webpack_require__(4);
 
 
-let game_width = Math.floor(1200);
-let game_height = Math.floor(750);
+let game_width = Math.floor(1000);
+let game_height = Math.floor(600);
 
 
 document.addEventListener("DOMContentLoaded", function() {
